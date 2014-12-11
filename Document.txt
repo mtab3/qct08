@@ -1,0 +1,24 @@
+
+ct08 を QXAFS で使うためのドライバ
+
+XafsM2 から見た時は DV 型のドライバとして働く様にする
+
+従って、
+
+  Reset
+  qInitialize
+  qGetData
+  qFinalize
+  
+の実装が必要十分
+これに加えて、
+
+  IsBusy
+  GetValue
+
+も受け付けるようにし、
+かつ、
+
+  _ChangedIsBusy
+
+のイベントも出すようにする。

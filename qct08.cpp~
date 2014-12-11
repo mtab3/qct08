@@ -1,0 +1,299 @@
+
+#include "ARIES.h"
+
+ARIES::ARIES( void )
+{
+  AIP = "192.168.1.1";
+  APORT = "4001";
+  ss = NULL;
+
+  for( int i = 0; i < MaxMotors + 1; i++ )
+    Moving[ i ] = false;
+
+  MPIs = 0;
+  for ( int i = 0; i < MaxSyncAxes; i++ ) {
+    MPICh[i] = 0;
+  }
+
+  RBuf[0] = '\0';
+
+  WatchPTimer = new QTimer;
+  WatchPTimer->setSingleShot( false );
+  WatchPTimer->setInterval( 100 );
+  WatchCount = 0;
+  connect( WatchPTimer, SIGNAL( timeout() ), this, SLOT( WatchP() ), Qt::UniqueConnection );
+
+  Connected = false;
+  Waiting = false;
+}
+
+ARIES::~ARIES( void )
+{
+  if ( ss != NULL )
+    ss->close();
+}
+
+void ARIES::SetAxNames( QMap<int,QString> num2name, QMap<QString,int> name2num )
+{
+  Num2Name = num2name;
+  Name2Num = name2num;
+}
+
+void ARIES::Connect( QString aip, QString aport )
+{
+  AIP = aip;
+  APORT = aport;
+  if ( ss == NULL ) {
+    ss = new QTcpSocket;
+    connect( ss, SIGNAL( readyRead( void ) ), this, SLOT( RcvMessage( void ) ), Qt::UniqueConnection );
+    ss->connectToHost( AIP, APORT.toInt() );
+    Connected = true;
+
+    ReadInitialStatus();
+  }
+}
+
+void ARIES::ReadInitialStatus( void )
+{
+  SMsg msg;
+  msg.setMsgType( INARIES );
+
+  QMap<QString,int>::iterator i;
+  for ( i = Name2Num.begin(); i != Name2Num.end(); i++ ) {
+    int ax = (*i);
+    for ( int n = 0; n < 12; n++ ) {
+      SendCMD( msg, QString( "RTB%1" ).arg( ax ), QString( "/%1" ).arg( n ) );
+    }
+  }
+}
+
+void ARIES::SendCMD( SMsg msg, QString cmd0, QString params )
+{
+  if ( ! Connected )
+    return;
+
+  aQue q;
+  q.smsg = msg;
+  q.cmd = cmd0;
+  q.params = params;
+  BeforeThrowQ << q;
+
+  SendCMD0();
+}
+
+void ARIES::SendCMD0( void )
+{
+  if ( Waiting )
+    return;
+
+  if ( BeforeThrowQ.count() > 0 ) {
+    Waiting = true;
+    aQue q = BeforeThrowQ.dequeue();
+    WaitingAnsQ << q;
+
+    QByteArray cmd = "\x02" + q.cmd.toLatin1() + q.params.toLatin1() + "\x0d\x0a\0";
+    ss->write( cmd.data() );
+    RBuf[0] = '\0';
+
+    WatchTimerStart( q );
+  }
+}
+
+// 移動コマンドは終了まで返事がない可能性が高いのでタイマーをかけて状況を聞きに行く
+// 他のコマンドも可能性あり
+void ARIES::WatchTimerStart( aQue q )
+{
+  QString cmd = q.cmd.left( 3 );
+
+  if (( cmd != "APS" )&&( cmd != "RPS" )&&( cmd != "MPI" ))
+    return;
+
+  int ch;
+  if ( cmd == "MPI" ) {
+    ch = q.cmd.mid( 5 ).toInt();
+  } else {
+    ch = q.cmd.mid( 3 ).toInt();
+  }
+  if ( Moving[ ch ] )
+    return;
+
+  if ( cmd == "MPI" ) {
+    if ( MPIs < MaxSyncAxes ) {
+      MPICh[ MPIs ] = ch;
+      MPIs++;
+    } else {
+      return;
+    }
+  }
+
+  Moving[ ch ] = true;
+  if ( WatchCount == 0 )                     // 監視中の軸の数のカウント
+    WatchPTimer->start();
+  WatchCount++;
+}
+
+void ARIES::WatchTimerStop( aQue q )
+{
+  QString cmd = q.cmd.left( 3 );
+  int ch = q.cmd.mid( 3 ).toInt();
+
+  if (( cmd == "APS" )||( cmd == "RPS" )) {  // 普通の、絶対/相対移動の場合
+    DeleteAnAxFromWatchList( ch );
+  } else if ( cmd == "MPS" ) {  // 多軸同時駆動の場合
+    for ( int i = 0; i < MPIs; i++ ) {  // 同時移動のテーブルに載っている軸について
+      DeleteAnAxFromWatchList( MPICh[i] );
+    }
+    MPIs = 0;
+  } else if ( cmd == "STP" ) {  // Stop コマンドによる強制停止 (Stop, StopEmergency)
+    if ( ch == 0 ) {    // ch 指定が 0 なら全軸停止
+      for ( int i = 0; i < MaxSyncAxes + 1; i++ ) {
+        if ( Moving[i] ) {   // 動いてたはずの軸については
+          DeleteAnAxFromWatchList( i );
+        }
+      }
+      if ( WatchCount > 0 ) {  // この条件が成立することは無いはずだが念のため
+        WatchPTimer->stop();
+        WatchCount = 0;
+      }
+    } else { // 単独軸の Stop
+      DeleteAnAxFromWatchList( ch );
+    }
+  }
+}
+
+void ARIES::DeleteAnAxFromWatchList( int ch )
+{
+  Moving[ ch ] = false;    // 移動中のフラグを落とす
+  SendWatchP( ch );        // 最後に止まった場所の確認
+  if ( WatchCount > 0 ) {  // 監視中の軸の数のカウント変更
+    WatchCount--;
+    if ( WatchCount == 0 ) {  // 監視中の軸がなくなったらタイマーストップ
+      WatchPTimer->stop();
+    }
+  }
+}
+
+void ARIES::WatchP( void )
+{
+  for ( int i = 0; i < MaxMotors + 1; i++ ) {
+    if ( Moving[i] ) {
+      SendWatchP( i );
+    }
+  }
+}
+
+void ARIES::SendWatchP( int i )
+{
+  aQue q;
+  // Starsから来たコマンドに対応したコマンド発行ではなく
+  // 内部の都合で発行するコマンドであることの印 ( INTERNALMSG )
+  // ただし、結果を EVENT の形で、Stars に発報する。
+  // NOTMSG も Stars 経由のコマンドでないことを示す印に使うが、
+  // 結果を Stars に返さない
+  q.smsg.setMsgType( INTERNALMSG );
+  q.smsg.setTo( QString( "%1.%2" ).arg( NameOnStars ).arg( Num2Name[ i ] ) );
+  // ARIESDrive.ch? 宛てに来たメッセージの処理であるかの様に見せかける。
+  q.cmd = QString( "RDP%1" ).arg( i );
+  q.params = "";
+  WaitingAnsQ << q;
+  QByteArray cmd = "\x02" + q.cmd.toLatin1() + "\x0d\x0a\0";
+  ss->write( cmd.data() );
+}
+
+void ARIES::SetSpeed( SMsg msg, int ch, int tNo, int maxSpeed )
+{
+  if ( ! Connected )
+    return;
+
+  vTable *t = &(vTables[ch][tNo]);
+  t->max_v = maxSpeed;
+
+  int start_v = t->start_v;
+  if ( start_v > ( t->max_v * 0.5 ) ) {
+    start_v = t->max_v * 0.4;
+  }
+  int acc_time;
+  if ( t->max_v >= 1000 )
+    acc_time = ( t->max_v / 1000 ) * 4 + 12;
+  else
+    acc_time = ( t->max_v / 1000 ) * 15 + 1;
+
+  aQue q;
+  q.smsg = msg;
+  q.cmd = QString( "WTB%1" ).arg( ch );
+  q.params = QString( "/%1/%2/%3/%4/%5/%6" )
+      .arg( tNo )
+      .arg( start_v ).arg( t->max_v )
+      .arg( acc_time ).arg( acc_time  /* t->dec_time */ )
+      .arg( t->acc_mode );
+  BeforeThrowQ << q;
+
+  SendCMD0();
+}
+
+
+void ARIES::RcvMessage( void )
+{
+  ss->readLine( rBuf, BUFSIZE );
+  strcat( RBuf, rBuf );
+  char *p = strchr( RBuf, '\x0d' );
+
+  if ( ( p != NULL ) && ( *(p+1) == '\x0a' ) ) {
+    // 末尾が \r\n を見て、一区切りの通信メッセージであると判断
+    *p = '\0';
+    p = RBuf;
+    while( *p != '\0' ) {
+      if ( *p < ' ' )
+        *p = ' ';
+      p++;
+    }
+    // 制御文字等を消す簡単な整形をしたあと
+    // パースしておく ( amsg )
+    AMsg amsg;
+    amsg.ParseMsg( QString( RBuf ) );
+    RBuf[0] = '\0';
+
+    // 結果待ちのキューの中に、送られてきたメッセージを待っている
+    // ものがあるかどうか探す
+    int i;
+    for ( i = WaitingAnsQ.count() - 1; i >= 0; i-- ) {
+      if ( WaitingAnsQ[i].cmd == amsg.cmd0() ) {
+        break;
+      }
+    }
+    if ( i >= 0 ) {
+      aQue q = WaitingAnsQ[i];
+      WaitingAnsQ.removeAt(i);
+      // 受けとったメッセージが、タイマーを発動しているメッセージだったら適当に止める
+      WatchTimerStop( q );
+      if ( q.smsg.Msgt() != INARIES ) {     // INARIES の場合は
+        emit NewMsg( q.smsg, amsg );
+      } else {
+        Parse( amsg );   // 外部に渡さずに自前で処理する
+      }
+    }
+    Waiting = false;
+    if ( BeforeThrowQ.count() > 0 ) {
+      SendCMD0();
+    }
+  }
+}
+
+void ARIES::Parse( AMsg msg )
+{
+  if ( msg.cmd() == "RTB" ) {
+    int ax = msg.ax().toInt();
+    int n = msg.vals()[0].toInt();
+    vTable *t = &(vTables[ ax ][ n ]);
+    QStringList vals = msg.vals();
+    t->ax = ax;
+    t->vNo = n;
+    t->start_v = vals[1].toInt();
+    t->max_v = vals[2].toInt();
+    t->acc_time = vals[3].toInt();
+    t->dec_time = vals[4].toInt();
+    t->acc_mode = vals[5].toInt();
+    t->acc_pulse = vals[6].toInt();
+    t->dec_pulse = vals[7].toInt();
+  }
+}

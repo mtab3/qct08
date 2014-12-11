@@ -1,0 +1,100 @@
+#ifndef ARIES_H
+#define ARIES_H
+
+#include <QtCore>
+#include <QtNetwork>
+
+#include <QTimer>
+
+#include "MsgType.h"
+#include "SMsg.h"
+#include "AMsg.h"
+#include "aMotor.h"
+
+#define BUFSIZE ( 2047 )
+
+#define MaxSyncAxes ( 4 )
+
+struct vTable {
+  int ax, vNo;
+  int start_v;
+  int max_v;
+  int acc_time, dec_time;
+  int acc_mode;
+  int acc_pulse, dec_pulse;
+
+  vTable( void ) { ax = -1; vNo = -1; };
+};
+
+struct aQue {
+  SMsg smsg;
+  QString cmd;
+  QString params;
+
+  aQue( void ) { cmd.clear(); params.clear(); };
+};
+
+class ARIES : public QObject
+{
+  Q_OBJECT
+
+  QString NameOnStars;
+  bool Connected;
+  bool Waiting;
+
+  QTimer *WatchPTimer;
+  int WatchCount;
+
+  QString AIP;
+  QString APORT;
+  QTcpSocket *ss;
+
+  vTable vTables[ 33 ][ 12 ];   // ax = 1 - 32, No = 0 - 11
+
+  QMap<int,QString> Num2Name;
+  QMap<QString,int> Name2Num;
+  bool Moving[ MaxMotors + 1 ];
+
+  QQueue<aQue> BeforeThrowQ;
+  QQueue<aQue> WaitingAnsQ;
+
+  int MPIs;
+  int MPICh[ MaxSyncAxes ];
+
+  char rBuf[ BUFSIZE + 1 ];
+  char wBuf[ BUFSIZE + 1 ];
+  char RBuf[ BUFSIZE + 1 ];
+
+  void WatchTimerStart( aQue q );
+  void WatchTimerStop( aQue q );
+  void SendWatchP( int i );
+  void DeleteAnAxFromWatchList( int ch );
+  void Parse( AMsg msg );
+
+private slots:
+  void ReadInitialStatus( void );
+
+  void WatchP( void );
+  void RcvMessage( void );
+  void SendCMD0();
+
+public:
+  ARIES( void );
+  ~ARIES( void );
+
+  void SetDriverName( QString name ) { NameOnStars = name; };
+  void SetAxNames( QMap<int,QString> num2name, QMap<QString,int> name2num );
+  void Connect( QString aip, QString aport );
+  bool isBusy( void ) { return Waiting; };
+  bool isBusy( int ch ) { return Moving[ ch ]; };
+  void SendCMD( SMsg msg, QString cmdBase, QString cmd );
+  void SetSpeed( SMsg msg, int ch, int tNo, int maxSpeed );
+
+public slots:
+
+signals:
+  void NewMsg( SMsg smsg, AMsg amsg );
+ 
+};
+
+#endif

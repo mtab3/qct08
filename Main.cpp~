@@ -1,0 +1,86 @@
+#include <QtGui>
+
+#include <QTimer>
+
+#include "MainWindow.h"
+
+MainWindow::MainWindow() : QMainWindow()
+{
+  setupUi( this );
+
+  if ( ! ReadConfig() )
+    return;
+  if ( Config.contains( "TITLE_NAME" ) )
+    TitleName->setText( Config[ "TITLE_NAME" ] );
+
+  Standby = false;
+  SyncRunning = false;
+  StandbyAxes = 0;
+  for ( int i = 0; i < MaxMotors + 1; i++ ) {
+    VTableNo[i] = MIDDLE;
+  }
+
+  A = new ARIES;
+  A->SetAxNames( AxNum2Name, AxName2Num );
+  if ( Config.contains( "NAME_ON_STARS" ) )
+    A->SetDriverName( Config[ "NAME_ON_STARS" ] );
+  else
+    A->SetDriverName( "ARIESDriver" );
+  connect( CMDInput, SIGNAL( returnPressed() ), this, SLOT( SendCMD() ), Qt::UniqueConnection );
+  connect( A, SIGNAL( NewMsg( SMsg, AMsg )), this, SLOT( ParseAns( SMsg, AMsg ) ), Qt::UniqueConnection );
+
+  A->Connect( Config[ "ARIES_IP" ], Config[ "ARIES_PORT" ] );
+  SetUpStarsConnection();
+}
+
+MainWindow::~MainWindow()
+{
+  delete A;
+}
+
+void MainWindow::SetUpStarsConnection( void )
+{
+  s = new Stars;
+
+  QString DefaultKey  = "ARIESDriver";
+  QString DefaultName = "ARIESDriver";
+  if ( Config.contains( "KEY_FILE_NAME" ) )
+    DefaultKey = Config[ "KEY_FILE_NAME" ];
+  if ( Config.contains( "NAME_ON_STARS" ) )
+    DefaultName = Config[ "NAME_ON_STARS" ];
+
+  s->ReadStarsKeys( DefaultKey, DefaultName );
+
+  // Stars Message
+  connect( s, SIGNAL( AskIsBusy( SMsg ) ), this, SLOT( AnsIsBusy( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskGetValue( SMsg ) ), this, SLOT( AnsGetValue( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskSetValue( SMsg ) ), this, SLOT( AnsSetValue( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskSetValueREL( SMsg ) ), this, SLOT( AnsSetValue( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskGetSpeedSelected( SMsg ) ), this, SLOT( AnsGetSpeedSelected( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskSpeedHigh( SMsg ) ), this, SLOT( AnsSelectSpeed( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskSpeedMiddle( SMsg ) ), this, SLOT( AnsSelectSpeed( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskSpeedLow( SMsg ) ), this, SLOT( AnsSelectSpeed( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskStop( SMsg ) ), this, SLOT( AnsStop( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskRemote( SMsg ) ), this, SLOT( AnsRemote( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskStopEmergency( SMsg ) ), this, SLOT( AnsStopEmergency( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskStandby( SMsg ) ), this, SLOT( AnsStandby( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskSyncRun( SMsg ) ), this, SLOT( AnsSyncRun( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskSetSpeed( SMsg ) ), this, SLOT( AnsSetSpeed( SMsg ) ), Qt::UniqueConnection );
+
+  s->SetNewSVAddress( Config["STARS_IP"] );
+  s->SetNewSVPort( Config["STARS_PORT"] );
+  s->MakeConnection();
+}
+
+void MainWindow::SendCMD( void )
+{
+  SMsg smsg;
+
+  smsg.setMsgType( NOTMSG );
+  A->SendCMD( smsg, CMDInput->text(), "" );
+}
+
+void MainWindow::ShowMsg( QString msg )
+{
+  TextDisp->appendPlainText( msg );
+}

@@ -1,0 +1,44 @@
+#ifndef MAINWIN_H
+#define MAINWIN_H
+
+#include <QMainWindow>
+#include <QPrinter>
+#include "ui_MainWindow.h"
+
+#include "qct08.h"
+#include "Stars.h"
+
+class MainWindow : public QMainWindow, private Ui::MainWindow
+{
+  Q_OBJECT
+
+  QMap<QString,QString> Config, ConfigL;
+  QMap<int,QString> ChNum2Name;
+  QMap<QString,int> ChName2Num;
+
+  CT08 *CT;
+  Stars *s;
+
+  bool ReadConfig( void );
+  void SetUp( void );
+  void SetUpStarsConnection( void );
+
+public:
+  MainWindow();
+  ~MainWindow();
+
+private slots:
+  void ParseAns( SMsg smsg, AMsg amsg );
+  void SendCMD( void );
+  void ShowMsg( QString msg );
+
+  void AnsIsBusy( SMsg msg );
+  void AnsGetValue( SMsg msg );
+  void AnsReset( SMsg msg );
+  void AnsQGetData( SMsg msg );
+  void AnsQFinalize( SMsg msg );
+signals:
+  
+};
+
+#endif
