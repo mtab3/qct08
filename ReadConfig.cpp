@@ -1,5 +1,5 @@
 
-#include "Main.h"
+#include "Body.h"
 
 #define CONFIG_FILE   "qct08.cfg"
 
@@ -7,7 +7,7 @@
 // Config[] は、スペース区切りの最初の項目がキー、2番めの項目が値
 // ConfigL[] は、スペース区切りの最初の項目がキー、スペース以降の全部が値
 
-bool Main::ReadConfig( void )
+bool Body::ReadConfig( void )
 {
   QFile f( CONFIG_FILE );
   if ( !f.open( QIODevice::ReadOnly ) ) {
@@ -50,7 +50,7 @@ bool Main::ReadConfig( void )
 
 #define CH_NAME   ( "CH_NAME" )
 
-void Main::SetUp( void )
+void Body::SetUp( void )
 {
   QList<QString> keys = Config.keys();
   

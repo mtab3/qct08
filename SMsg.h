@@ -3,6 +3,7 @@
 #define SMSG_H
 
 #include <QString>
+#include <QStringList>
 
 #include "MsgType.h"
 

@@ -1,14 +1,12 @@
-#ifndef MAINWIN_H
-#define MAINWIN_H
+#ifndef BODY_H
+#define BODY_H
 
-#include <QMainWindow>
-#include <QPrinter>
-#include "ui_MainWindow.h"
+#include <QObject>
 
 #include "qct08.h"
 #include "Stars.h"
 
-class MainWindow : public QMainWindow, private Ui::MainWindow
+class Body : public QObject
 {
   Q_OBJECT
 
@@ -19,22 +17,24 @@ class MainWindow : public QMainWindow, private Ui::MainWindow
   CT08 *CT;
   Stars *s;
 
+  bool busy;
+  
   bool ReadConfig( void );
   void SetUp( void );
+  void SetUpCT08Connection( void );
   void SetUpStarsConnection( void );
 
 public:
-  MainWindow();
-  ~MainWindow();
+  Body();
+  ~Body();
 
 private slots:
-  void ParseAns( SMsg smsg, AMsg amsg );
-  void SendCMD( void );
-  void ShowMsg( QString msg );
+  void ParseAns( SMsg smsg, CTMsg amsg );
 
   void AnsIsBusy( SMsg msg );
   void AnsGetValue( SMsg msg );
   void AnsReset( SMsg msg );
+  void AnsQInitialize( SMsg msg );
   void AnsQGetData( SMsg msg );
   void AnsQFinalize( SMsg msg );
 signals:

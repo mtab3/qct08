@@ -1,12 +1,12 @@
 #include <QCoreApplication>
 
 #include "main.h"
-#include "Main.h"
+#include "Body.h"
 
 int main( int argc, char *argv[] )
 {
   QCoreApplication app( argc, argv );
-  Main *body = new Main;
+  Body *body = new Body;
 
   return app.exec();
 }

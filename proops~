@@ -1,7 +1,0 @@
-QT += network
-
-#TRANSLATIONS = BLCMsg_jp.ts
-#RC_FILE = BLC.rc
-
-# LIBS += -L/XMAPsdk/lib -lhandel
-# LIBS += -lYdx64.lib

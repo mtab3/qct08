@@ -1,14 +1,11 @@
-#include "MainWindow.h"
+#include "Body.h"
 
-#if 0
-void Main::AnsIsBusy( SMsg msg )
+void Body::AnsIsBusy( SMsg msg )
 {
   CT->SendCMD( msg, "Busy ?" );
 }
-#endif
 
-#if 0
-void Main::AnsGetValue( SMsg msg )
+void Body::AnsGetValue( SMsg msg )
 {
   if ( ( msg.ToCh() == "" ) || ( ! ChName2Num.contains( msg.ToCh() ) ) ){
     s->SendAns( msg.To(), msg.From(), "@GetValue Er:" );
@@ -16,9 +13,8 @@ void Main::AnsGetValue( SMsg msg )
     CT->SendCMD( msg, "get value" );
   }
 }
-#endif
 
-void MainWindow::AnsReset( SMsg msg )
+void Body::AnsReset( SMsg msg )
 {
   if ( msg.ToCh() != "" ) {
     s->SendAns( msg.To(), msg.From(), QString( "@%1 Er:" ).arg( msg.Msg() ) );
@@ -26,12 +22,12 @@ void MainWindow::AnsReset( SMsg msg )
   }
 }
 
-void Main::AnsQInitialize( SMsg msg )
+void Body::AnsQInitialize( SMsg msg )
 {
   if ( msg.ToCh() != "" ) {
     s->SendAns( msg.To(), msg.From(), QString( "@%1 Er:" ).arg( msg.Msg() ) );
   } else {
-    int ch = ChName2Num[ msg.ToCh() ];
+    //    int ch = ChName2Num[ msg.ToCh() ];
 
 
 
@@ -40,12 +36,12 @@ void Main::AnsQInitialize( SMsg msg )
   }
 }
 
-void Main::AnsQGetData( SMsg msg )
+void Body::AnsQGetData( SMsg msg )
 {
   if ( ( msg.ToCh() == "" ) || ( ! ChName2Num.contains( msg.ToCh() ) ) ){
     s->SendAns( msg.To(), msg.From(), QString( "@%1 Er:" ).arg( msg.Msg() ) );
   } else {
-    int ch = ChName2Num[ msg.ToCh() ];
+    //    int ch = ChName2Num[ msg.ToCh() ];
 
 
 
@@ -55,12 +51,12 @@ void Main::AnsQGetData( SMsg msg )
   }
 }
 
-void Main::AnsQFinalize( SMsg msg )
+void Body::AnsQFinalize( SMsg msg )
 {
   if ( msg.ToCh() != "" ) {
     s->SendAns( msg.To(), msg.From(), QString( "@%1 Er:" ).arg( msg.Msg() ) );
   } else {
-    int ch = ChName2Num[ msg.ToCh() ];
+    //    int ch = ChName2Num[ msg.ToCh() ];
 
 
 
@@ -71,18 +67,14 @@ void Main::AnsQFinalize( SMsg msg )
 
 
 
-    A->SendCMD( msg, QString( "STP%1" ).arg( ch ), "/0" );
+    //    CT->SendCMD( msg, QString( "STP%1" ).arg( ch ), "/0" );
   }
 }
 
 
 
-void Main::ParseAns( SMsg smsg, CTMsg ctmsg )
+void Body::ParseAns( SMsg smsg, CTMsg ctmsg )
 {
-  if ( ctmsg.cmd() == "MPI" ) {// MPI に対応するアクションは無い
-    return;
-  }
-
   QString ans = QString( "@%1 " ).arg( smsg.Msg() );
 #if 0
   if ( amsg.stat() == QString( "E" ) ) {  // ARIES からの返答はエラーだった

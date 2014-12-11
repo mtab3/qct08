@@ -31,35 +31,41 @@ class CT08 : public QObject
   QString CTPORT;
   QTcpSocket *ss;
 
-  QMap<int,QString> Num2Name;
-  QMap<QString,int> Name2Num;
-
   QQueue<aQue> BeforeThrowQ;
   QQueue<aQue> WaitingAnsQ;
 
   char rBuf[ BUFSIZE + 1 ];
-  char wBuf[ BUFSIZE + 1 ];
   char RBuf[ BUFSIZE + 1 ];
+  
+#if 0
+  QMap<int,QString> Num2Name;
+  QMap<QString,int> Name2Num;
 
-  void Parse( AMsg msg );
-
+  char wBuf[ BUFSIZE + 1 ];
+#endif
+			 
 private slots:
   void RcvMessage( void );
-  void SendCMD0();
-
+  void SendCMD0( void );
+#if 0
+#endif
+  
 public:
   CT08( void );
   ~CT08( void );
 
-  void SetChNames( QMap<int,QString> num2name, QMap<QString,int> name2num );
   void Connect( QString aip, QString aport );
-  bool isBusy( void ) { return Waiting; };
-  void SendCMD( SMsg msg, QString cmdBase, QString cmd );
+  void SendCMD( SMsg msg, QString cmd );
 
+#if 0  
+  void SetChNames( QMap<int,QString> num2name, QMap<QString,int> name2num );
+  bool isBusy( void ) { return Waiting; };
+#endif
+							
 public slots:
 
 signals:
-  void NewMsg( SMsg smsg, AMsg amsg );
+  void NewMsg( SMsg smsg, CTMsg amsg );
  
 };
 

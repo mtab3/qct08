@@ -1,22 +1,24 @@
 #include <QTimer>
 
-#include "Main.h"
+#include "Body.h"
 
-Main::Main()
+Body::Body()
 {
   if ( ! ReadConfig() )
     return;
 
+  busy = false;
+  
   SetUpCT08Connection();
   SetUpStarsConnection();
 }
 
-Main::~Main()
+Body::~Body()
 {
-  delete A;
+  delete CT;
 }
 
-void Main::SetUpCT08Connection( void )
+void Body::SetUpCT08Connection( void )
 {
   CT = new CT08;
 
@@ -26,14 +28,14 @@ void Main::SetUpCT08Connection( void )
     A->SetDriverName( Config[ "NAME_ON_STARS" ] );
   else
     A->SetDriverName( "ARIESDriver" );
-  connect( A, SIGNAL( NewMsg( SMsg, AMsg )), this, SLOT( ParseAns( SMsg, AMsg ) ), Qt::UniqueConnection );
 #endif
   
+  connect( CT, SIGNAL( NewMsg( SMsg, CTMsg )), this, SLOT( ParseAns( SMsg, CTMsg ) ), Qt::UniqueConnection );
   CT->Connect( Config[ "CT08_IP" ], Config[ "CT08_PORT" ] );
 }
 
 
-void Main::SetUpStarsConnection( void )
+void Body::SetUpStarsConnection( void )
 {
   s = new Stars;
 

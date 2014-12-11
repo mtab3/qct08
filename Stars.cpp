@@ -122,8 +122,6 @@ void Stars::MakeConnection( void )
       if ( ss == NULL )
         ss = new QTcpSocket;
 
-      emit AskRecord( tr( "Connecting Stars Server [%1] [%2] as [%3]" )
-                      .arg( StarsServer ).arg( StarsSPort ).arg( MyNameOnStars ) );
       ConnectionStage = 0;
       connect( ss, SIGNAL( readyRead( void ) ), this, SLOT( ReceiveMessageFromStars( void ) ), Qt::UniqueConnection );
       ss->connectToHost( StarsServer, StarsSPort );
@@ -149,7 +147,6 @@ void Stars::ReceiveMessageFromStars( void )
     while( ss->canReadLine() )
       RBuf = ss->readLine( 4000 );
     ConnectionStage = 2;
-    emit AskRecord( tr( "Success to connect." ) );
     emit ConnectionIsReady( this );
     break;
   case 2:
@@ -163,32 +160,14 @@ void Stars::ReceiveMessageFromStars( void )
           emit AskIsBusy( smsg ); break;
         case GETVALUE:
           emit AskGetValue( smsg ); break;
-        case SETVALUE:
-          emit AskSetValue( smsg ); break;
-        case SETVALUEREL:
-          emit AskSetValueREL( smsg ); break;
-        case GETSPEEDSELECTED:
-          emit AskGetSpeedSelected( smsg ); break;
-        case SPEEDHIGH:
-          emit AskSpeedHigh( smsg ); break;
-        case SPEEDMIDDLE:
-          emit AskSpeedMiddle( smsg ); break;
-        case SPEEDLOW:
-          emit AskSpeedLow( smsg ); break;
-	case STOP:
-	  emit AskStop( smsg ); break;
-	case REMOTE:
-	  emit AskRemote( smsg ); break;
-	case STOPEMERGENCY:
-	  emit AskStopEmergency( smsg ); break;
-	case STANDBY:
-	  emit AskStandby( smsg ); break;
-	case SYNCRUN:
-	  emit AskSyncRun( smsg ); break;
-	case SETHIGHSPEED:
-	case SETMIDDLESPEED:
-	case SETLOWSPEED:
-	  emit AskSetSpeed( smsg ); break;
+        case RESET:
+          emit AskReset( smsg ); break;
+        case QINITIALIZE:
+          emit AskQInitialize( smsg ); break;
+        case QGETDATA:
+          emit AskQGetData( smsg ); break;
+        case QFINALIZE:
+          emit AskQFinalize( smsg ); break;
 
         default:
           SendAns( MyNameOnStars, smsg.From(), "Er: Undefined Command" );
@@ -196,7 +175,6 @@ void Stars::ReceiveMessageFromStars( void )
         }
         break;
       case RES_EVENT:
-        emit AskRecord( tr( "Receive an event from Stars [%1]" ).arg( RBuf.data() ) );
         switch( smsg.Msgt() ) {
 #if 0
         case EvCHANGEDVALUE:
@@ -211,8 +189,6 @@ void Stars::ReceiveMessageFromStars( void )
         break;
       default:
         SendAns( MyNameOnStars, smsg.From(), "Er: Undefined Command" );
-        emit AskRecord( tr( "Receive an unrecognized message from Stars [%1]" )
-                        .arg( RBuf.data() ) );
       }
     }
   }
@@ -221,14 +197,12 @@ void Stars::ReceiveMessageFromStars( void )
 void Stars::SendAns( QString from, QString to, QString msg )
 {
   QString aLine = from + ">" + to + " " + msg + "\n";
-  emit AskRecord( tr( "Sending an answer [%1] to Stars" ).arg( aLine ) );
   ss->write( aLine.toLatin1() );
 }
 
 void Stars::SendEvent( QString from, QString msg )
 {
   QString aLine = from + ">System " + msg +"\n";
-  emit AskRecord( tr( "Sending an Event [%1] to Stars" ).arg( aLine ) );
   ss->write( aLine.toLatin1() );
 }
 
@@ -239,7 +213,6 @@ bool Stars::SendCMD( QString dev, QString cmd1, QString cmd2 )
     Cmd += " " + cmd2;
   Cmd += "\n";
 
-  emit AskRecord( tr( "Sending a message [%1] to Stars" ).arg( Cmd ) );
   ss->write( Cmd.toLatin1() );
 
   return true;
@@ -252,7 +225,6 @@ bool Stars::SendCMD2( QString fromCh, QString dev, QString cmd1, QString cmd2 )
     Cmd += " " + cmd2;
   Cmd += "\n";
 
-  emit AskRecord( tr( "Sending a message [%1] to Stars" ).arg( Cmd ) );
   ss->write( Cmd.toLatin1() );
 
   return true;
