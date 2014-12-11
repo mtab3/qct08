@@ -1,0 +1,9 @@
+*.[oa]
+*~
+ui_*
+moc_*
+qrc_*
+*.pro.user
+*.core
+qct08
+*.pro
