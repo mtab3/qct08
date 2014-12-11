@@ -2,7 +2,8 @@
 
 void Body::AnsIsBusy( SMsg msg )
 {
-  CT->SendCMD( msg, "Busy ?" );
+  s->SendAns( msg.To(), msg.From(),
+	      QString( "@%1 %2" ).arg( msg.Msg() ).arg( busy ? 1 : 0 ) );
 }
 
 void Body::AnsGetValue( SMsg msg )
@@ -10,28 +11,33 @@ void Body::AnsGetValue( SMsg msg )
   if ( ( msg.ToCh() == "" ) || ( ! ChName2Num.contains( msg.ToCh() ) ) ){
     s->SendAns( msg.To(), msg.From(), "@GetValue Er:" );
   } else {
-    CT->SendCMD( msg, "get value" );
+    int ch = ChName2Num[ msg.ToCh() ];
+    QString cmd = QString( "CTR?%1" ).arg( ch, 2, 10, QChar( '0' ) );
+    CT->SendCMD( msg, cmd );
   }
 }
 
 void Body::AnsReset( SMsg msg )
 {
-  if ( msg.ToCh() != "" ) {
-    s->SendAns( msg.To(), msg.From(), QString( "@%1 Er:" ).arg( msg.Msg() ) );
-  } else {
-  }
+  CT->SendCMD( msg, "CLAL" );
+  s->SendAns( msg.To(), msg.From(), QString( "@%1 Ok:" ).arg( msg.Msg() ) );
+  // 返答を待たず Ok:
 }
 
 void Body::AnsQInitialize( SMsg msg )
 {
-  if ( msg.ToCh() != "" ) {
+  if ( msg.ToCh() == "" ) {
     s->SendAns( msg.To(), msg.From(), QString( "@%1 Er:" ).arg( msg.Msg() ) );
   } else {
-    //    int ch = ChName2Num[ msg.ToCh() ];
+    int ch = ChName2Num[ msg.ToCh() ];
+
+    CT->SendCMD( msg, "CLAL" );        // 全チャンネルデータクリア
+    CT->SendCMD( msg, "GATEIN_EN" );   // default でこれになってるはず。念の為
+    
 
 
-
-
+    
+    
     s->SendAns( msg.To(), msg.From(), QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   }
 }
