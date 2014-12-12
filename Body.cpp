@@ -8,6 +8,7 @@ Body::Body()
     return;
 
   busy = false;
+  initialized = false;
   
   SetUpCT08Connection();
   SetUpStarsConnection();
@@ -22,14 +23,6 @@ void Body::SetUpCT08Connection( void )
 {
   CT = new CT08;
 
-#if 0  
-  CT->SetAxNames( AxNum2Name, AxName2Num );
-  if ( Config.contains( "NAME_ON_STARS" ) )
-    A->SetDriverName( Config[ "NAME_ON_STARS" ] );
-  else
-    A->SetDriverName( "ARIESDriver" );
-#endif
-  
   connect( CT, SIGNAL( NewMsg( SMsg, CTMsg )), this, SLOT( ParseAns( SMsg, CTMsg ) ), Qt::UniqueConnection );
   CT->Connect( Config[ "CT08_IP" ], Config[ "CT08_PORT" ] );
 }

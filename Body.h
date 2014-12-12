@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "qct08.h"
+#include "ct08.h"
 #include "Stars.h"
 
 class Body : public QObject
@@ -18,6 +18,7 @@ class Body : public QObject
   Stars *s;
 
   bool busy;
+  bool initialized;
   
   bool ReadConfig( void );
   void SetUp( void );
@@ -29,8 +30,6 @@ public:
   ~Body();
 
 private slots:
-  void ParseAns( SMsg smsg, CTMsg amsg );
-
   void AnsIsBusy( SMsg msg );
   void AnsGetValue( SMsg msg );
   void AnsReset( SMsg msg );

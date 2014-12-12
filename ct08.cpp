@@ -1,5 +1,5 @@
 
-#include "qct08.h"
+#include "ct08.h"
 
 CT08::CT08( void )
 {
@@ -10,7 +10,6 @@ CT08::CT08( void )
   RBuf[0] = '\0';
 
   Connected = false;
-  Waiting = false;
 }
 
 CT08::~CT08( void )
@@ -48,46 +47,16 @@ void CT08::RcvMessage( void )
       p++;
     }
 
-    aQue q;
-    if ( WaitingAnsQ.count() > 0 ) {
-      q = WaitingAnsQ[0];
-      WaitingAnsQ.removeAt(0);
-    };
-
     CTMsg ctmsg;
     ctmsg.ParseMsg( QString( RBuf ) );
     RBuf[0] = '\0';
-    emit NewMsg( q.smsg, ctmsg );
-
-    Waiting = false;
+    emit NewMsg( ctmsg );
   }
 }
 
-void CT08::SendCMD( SMsg msg, QString cmd )
+void CT08::SendCMD( QString cmd )
 {
-  if ( ! Connected )
-    return;
-
-  aQue q;
-  q.smsg = msg;
-  q.cmd = cmd;
-  BeforeThrowQ << q;
-
-  SendCMD0();
-}
-
-void CT08::SendCMD0( void )
-{
-  if ( Waiting )
-    return;
-
-  if ( BeforeThrowQ.count() > 0 ) {
-    Waiting = true;
-    aQue q = BeforeThrowQ.dequeue();
-    WaitingAnsQ << q;
-
-    QByteArray cmd = q.cmd.toLatin1() + "\x0d\x0a\0";
-    ss->write( cmd.data() );
-    RBuf[0] = '\0';
-  }
+  QByteArray Cmd = cmd.toLatin1() + "\x0d\x0a\0";
+  ss->write( Cmd.data() );
+  RBuf[0] = '\0';
 }
