@@ -9,6 +9,8 @@ Body::Body()
 
   busy = false;
   initialized = false;
+  gotData = false;
+  finalized = false;
   
   SetUpCT08Connection();
   SetUpStarsConnection();

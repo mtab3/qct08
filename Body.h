@@ -19,6 +19,8 @@ class Body : public QObject
 
   bool busy;
   bool initialized;
+  bool gotData;
+  bool finalized;
   
   bool ReadConfig( void );
   void SetUp( void );
