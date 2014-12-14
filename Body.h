@@ -21,7 +21,11 @@ class Body : public QObject
   bool initialized;
   bool gotData;
   bool finalized;
+
+  int recSeq;
   
+  SMsg smsg;
+
   bool ReadConfig( void );
   void SetUp( void );
   void SetUpCT08Connection( void );
@@ -38,6 +42,9 @@ private slots:
   void AnsQInitialize( SMsg msg );
   void AnsQGetData( SMsg msg );
   void AnsQFinalize( SMsg msg );
+
+  void ansGetValue( void );
+  void ansGetData( void );
 signals:
   
 };

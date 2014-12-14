@@ -42,7 +42,7 @@ public:
   void MakeConnection( void );
   bool SendCMD( QString dev, QString cmd1, QString cmd2 = "" );
   bool SendCMD2( QString fromCh, QString dev, QString cmd1, QString cmd2 = "" );
-  void SendAns( QString from, QString to, QString msg );
+  void SendAns( SMsg msg, QString ans );
   void SendEvent( QString from, QString msg );
 
 private:

@@ -7,6 +7,7 @@ CT08::CT08( void )
   CTPORT = "4001";
   ss = NULL;
 
+  cmdq.clear();
   RBuf[0] = '\0';
 
   Connected = false;
@@ -54,9 +55,23 @@ void CT08::RcvMessage( void )
   }
 }
 
-void CT08::SendCMD( QString cmd )
+void CT08::QueCmd( bool waitf, QString cmd )
 {
+  cmdq << QString( "%1" ).arg( waitf ? "%" : "#" ) + cmd;
+}
+
+void CT08::SendCmd( void )
+{
+  // タイマーをかけて コマンド送信のサブファンクションを呼ぶ
+  // 先頭が % のコマンドは応答を待つ、# は応答を待たない
+}
+
+
+
+#if 0
+
+// Send Cmd
   QByteArray Cmd = cmd.toLatin1() + "\x0d\x0a\0";
   ss->write( Cmd.data() );
   RBuf[0] = '\0';
-}
+#endif

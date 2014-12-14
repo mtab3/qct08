@@ -170,7 +170,7 @@ void Stars::ReceiveMessageFromStars( void )
           emit AskQFinalize( smsg ); break;
 
         default:
-          SendAns( MyNameOnStars, smsg.From(), "Er: Undefined Command" );
+          SendAns( smsg, "Er: Undefined Command" );
           break;
         }
         break;
@@ -183,20 +183,20 @@ void Stars::ReceiveMessageFromStars( void )
           emit EvIsBusy( smsg ); break;
 #endif
         default:
-          SendAns( MyNameOnStars, smsg.From(), "Er: Undefined Command" );
+          SendAns( smsg, "Er: Undefined Command" );
           break;
         }
         break;
       default:
-        SendAns( MyNameOnStars, smsg.From(), "Er: Undefined Command" );
+        SendAns( smsg, "Er: Undefined Command" );
       }
     }
   }
 }
 
-void Stars::SendAns( QString from, QString to, QString msg )
+void Stars::SendAns( SMsg msg, QString ans )
 {
-  QString aLine = from + ">" + to + " " + msg + "\n";
+  QString aLine = msg.To() + ">" + msg.From() + " " + ans + "\n";
   ss->write( aLine.toLatin1() );
 }
 

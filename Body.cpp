@@ -8,6 +8,8 @@ Body::Body()
     return;
 
   busy = false;
+  recSeq = 0;
+  
   initialized = false;
   gotData = false;
   finalized = false;

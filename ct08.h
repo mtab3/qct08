@@ -12,13 +12,14 @@
 
 #define BUFSIZE ( 2047 )
 
+#if 0
 struct aQue {
-  SMsg smsg;
   QString cmd;
   QString params;
 
   aQue( void ) { cmd.clear(); params.clear(); };
 };
+#endif
 
 class CT08 : public QObject
 {
@@ -29,6 +30,8 @@ class CT08 : public QObject
   QString CTIP;
   QString CTPORT;
   QTcpSocket *ss;
+
+  QStringList cmdq;
 
   char rBuf[ BUFSIZE + 1 ];
   char RBuf[ BUFSIZE + 1 ];
@@ -41,13 +44,14 @@ public:
   ~CT08( void );
 
   void Connect( QString aip, QString aport );
-  void SendCMD( QString cmd );
+  void QueCmd( bool waitf, QString cmd );
+  void SendCmd( void );
 
 public slots:
 
 signals:
   void NewMsg( CTMsg amsg );
- 
+  void received( void );
 };
 
 #endif
