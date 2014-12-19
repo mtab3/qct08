@@ -3,14 +3,17 @@
 
 CT08::CT08( void )
 {
-  CTIP = "192.168.1.1";
-  CTPORT = "4001";
+  CTIP = "192.168.51.204";
+  CTPORT = "7777";
   ss = NULL;
 
   cmdq.clear();
   RBuf[0] = '\0';
 
   Connected = false;
+  t = new QTimer;
+  t->setInterval( 100 );
+  connect( t, SIGNAL( timeout() ), this, SLOT( watch() ), Qt::UniqueConnection );
 }
 
 CT08::~CT08( void )
@@ -25,9 +28,11 @@ void CT08::Connect( QString ip, QString port )
   CTPORT = port;
   if ( ss == NULL ) {
     ss = new QTcpSocket;
-    connect( ss, SIGNAL( readyRead( void ) ), this, SLOT( RcvMessage( void ) ), Qt::UniqueConnection );
+    connect( ss, SIGNAL( readyRead( void ) ),
+	     this, SLOT( RcvMessage( void ) ), Qt::UniqueConnection );
     ss->connectToHost( CTIP, CTPORT.toInt() );
     Connected = true;
+    t->start();
   }
 }
 
@@ -51,27 +56,36 @@ void CT08::RcvMessage( void )
     CTMsg ctmsg;
     ctmsg.ParseMsg( QString( RBuf ) );
     RBuf[0] = '\0';
-    emit NewMsg( ctmsg );
+    emit received( ctmsg );
   }
 }
 
 void CT08::QueCmd( bool waitf, QString cmd )
 {
-  cmdq << QString( "%1" ).arg( waitf ? "%" : "#" ) + cmd;
+  aQue *que = new aQue;
+  que->cmd = cmd;
+  que->waitf = waitf;
+
+  cmdq << que;
 }
 
 void CT08::SendCmd( void )
 {
   // タイマーをかけて コマンド送信のサブファンクションを呼ぶ
   // 先頭が % のコマンドは応答を待つ、# は応答を待たない
+  while( cmdq.count() > 0 ) {
+
+    QByteArray Cmd = cmdq[0]->cmd.toLatin1() + "\x0d\x0a\0";
+    ss->write( Cmd.data() );
+    RBuf[0] = '\0';
+
+    cmdq.remove( 0 );
+  }
+}
+
+void CT08::watch( void )
+{
 }
 
 
 
-#if 0
-
-// Send Cmd
-  QByteArray Cmd = cmd.toLatin1() + "\x0d\x0a\0";
-  ss->write( Cmd.data() );
-  RBuf[0] = '\0';
-#endif

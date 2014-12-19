@@ -16,10 +16,10 @@ void Body::AnsGetValue( SMsg msg )
     int ch = ChName2Num[ msg.ToCh() ];
     QString cmd = QString( "CTR?%1" ).arg( ch, 2, 10, QChar( '0' ) );
     CT->QueCmd( false, cmd );
-
+    
     recSeq = 0;
-    disconnect( CT, SIGNAL( received() ) );
-    connect( CT, SIGNAL( received() ), this, SLOT( ansGetValue() ) );
+    disconnect( CT, SIGNAL( received( CTMsg ) ) );
+    connect( CT, SIGNAL( received( CTMsg ) ), this, SLOT( ansGetValue( CTMsg ) ) );
     CT->SendCmd();
   }
 }
@@ -36,7 +36,7 @@ void Body::AnsReset( SMsg msg )
   CT->QueCmd( false, "CLAL" );
   CT->QueCmd( false, "GATEIN_EN" );   // default でこれになってるはず。念の為
 
-  disconnect( CT, SIGNAL( received() ) );
+  disconnect( CT, SIGNAL( received( CTMsg ) ) );
   CT->SendCmd();
   s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   // 返答を待たず Ok:
@@ -62,7 +62,7 @@ void Body::AnsQInitialize( SMsg msg )
       gotData = false;
       finalized = false;
 
-      disconnect( CT, SIGNAL( received() ) );
+      disconnect( CT, SIGNAL( received( CTMsg ) ) );
       CT->SendCmd();
     }
     
@@ -90,7 +90,7 @@ void Body::AnsQGetData( SMsg msg )
       finalized = false;
 
       recSeq = 0;
-      disconnect( CT, SIGNAL( received() ) );
+      disconnect( CT, SIGNAL( received( CTMsg ) ) );
       connect( CT, SIGNAL( received() ), this, SLOT( ansGetData() ) );
       CT->SendCmd();
     };
@@ -113,7 +113,7 @@ void Body::AnsQFinalize( SMsg msg )
       gotData = false;
       finalized = true;
 
-      disconnect( CT, SIGNAL( received() ) );
+      disconnect( CT, SIGNAL( received( CTMsg ) ) );
       CT->SendCmd();
     }
 
@@ -121,9 +121,10 @@ void Body::AnsQFinalize( SMsg msg )
   }
 }
 
-void Body::ansGetValue( void )
+void Body::ansGetValue( CTMsg msg )
 {
   // recSeq に従って動作をすすめる (GetValue は 1step)
+  s->SendAns( smsg, QString( "%1" ).arg( msg.msg().toInt() ) );
 }
 
 void Body::ansGetData( void )

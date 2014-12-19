@@ -43,7 +43,7 @@ private slots:
   void AnsQGetData( SMsg msg );
   void AnsQFinalize( SMsg msg );
 
-  void ansGetValue( void );
+  void ansGetValue( CTMsg msg );
   void ansGetData( void );
 signals:
   

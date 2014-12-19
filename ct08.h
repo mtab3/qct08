@@ -12,32 +12,32 @@
 
 #define BUFSIZE ( 2047 )
 
-#if 0
 struct aQue {
   QString cmd;
-  QString params;
+  bool waitf;
 
-  aQue( void ) { cmd.clear(); params.clear(); };
+  aQue( void ) { cmd.clear(); waitf = false; };
 };
-#endif
 
 class CT08 : public QObject
 {
   Q_OBJECT
 
   bool Connected;
+  QTimer *t;
 
   QString CTIP;
   QString CTPORT;
   QTcpSocket *ss;
 
-  QStringList cmdq;
+  QVector<aQue*> cmdq;
 
   char rBuf[ BUFSIZE + 1 ];
   char RBuf[ BUFSIZE + 1 ];
   
 private slots:
   void RcvMessage( void );
+  void watch( void );
   
 public:
   CT08( void );
@@ -50,8 +50,7 @@ public:
 public slots:
 
 signals:
-  void NewMsg( CTMsg amsg );
-  void received( void );
+  void received( CTMsg msg );
 };
 
 #endif
