@@ -5,6 +5,10 @@
 #define BRANCH_NAME ( "master" )
 #define GITLOGS ""\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Mon Mar 9 20:28:22 2015 +0900\n"\
+                "    it may work as stndard nct08 driver for XafsM2\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Fri Dec 19 22:40:58 2014 +0900\n"\
                 "    GetValue works\n"\
 		"\n"\

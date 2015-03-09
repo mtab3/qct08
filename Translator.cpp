@@ -61,7 +61,7 @@ void Body::simpleSend( QString cmd, SMsg msg )
 
 void Body::AnsSetTimerPreset( SMsg msg )
 {
-  QString cmd = QString( "STPR%1" ).arg( msg.Val() );
+  QString cmd = QString( "STPRF%1" ).arg( msg.Val() );
   simpleSend( cmd, msg );
 }
 
@@ -180,7 +180,7 @@ void Body::ansGetValue( CTMsg msg )
 {
   // recSeq に従って動作をすすめる (GetValue は 1step)
   disconnect( CT, SIGNAL( received( CTMsg ) ), this, SLOT( ansGetValue( CTMsg ) ) );
-  s->SendAns( smsg, QString( "%1" ).arg( msg.msg().toInt() ) );
+  s->SendAns( smsg, QString( "@GetValue %1" ).arg( msg.msg().toInt() ) );
 }
 
 void Body::ansGetData( void )
