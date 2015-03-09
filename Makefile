@@ -715,7 +715,7 @@ moc_Body.cpp: ../../../../local/include/qt5/QtCore/QObject \
 		Stars.h \
 		../../../../local/include/qt5/QtNetwork/QTcpSocket \
 		Body.h
-	/usr/local/lib/qt5/bin/moc $(DEFINES) -I/usr/local/lib/qt5/mkspecs/freebsd-clang -I/usr/home/tabuchi/prog/qct08 -I/usr/home/tabuchi/prog/qct08 -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtNetwork -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtCore -I/usr/local/include -I/usr/include/c++/v1 -I/usr/include/clang/3.4.1 -I/usr/include Body.h -o moc_Body.cpp
+	/usr/local/lib/qt5/bin/moc $(DEFINES) -I/usr/local/lib/qt5/mkspecs/freebsd-clang -I/usr/home/tabuchi/prog/qct08 -I/usr/home/tabuchi/prog/qct08 -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtNetwork -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtCore -I/usr/local/include -I/usr/include/c++/v1 -I/usr/include/c++/4.2 -I/usr/include/c++/4.2/backward -I/usr/include/clang/3.3 -I/usr/include Body.h -o moc_Body.cpp
 
 moc_ct08.cpp: ../../../../local/include/qt5/QtCore/QtCore \
 		../../../../local/include/qt5/QtCore/QtCoreDepends \
@@ -963,7 +963,7 @@ moc_ct08.cpp: ../../../../local/include/qt5/QtCore/QtCore \
 		SMsg.h \
 		ct08Msg.h \
 		ct08.h
-	/usr/local/lib/qt5/bin/moc $(DEFINES) -I/usr/local/lib/qt5/mkspecs/freebsd-clang -I/usr/home/tabuchi/prog/qct08 -I/usr/home/tabuchi/prog/qct08 -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtNetwork -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtCore -I/usr/local/include -I/usr/include/c++/v1 -I/usr/include/clang/3.4.1 -I/usr/include ct08.h -o moc_ct08.cpp
+	/usr/local/lib/qt5/bin/moc $(DEFINES) -I/usr/local/lib/qt5/mkspecs/freebsd-clang -I/usr/home/tabuchi/prog/qct08 -I/usr/home/tabuchi/prog/qct08 -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtNetwork -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtCore -I/usr/local/include -I/usr/include/c++/v1 -I/usr/include/c++/4.2 -I/usr/include/c++/4.2/backward -I/usr/include/clang/3.3 -I/usr/include ct08.h -o moc_ct08.cpp
 
 moc_Stars.cpp: ../../../../local/include/qt5/QtNetwork/QTcpSocket \
 		../../../../local/include/qt5/QtNetwork/qtcpsocket.h \
@@ -1050,7 +1050,7 @@ moc_Stars.cpp: ../../../../local/include/qt5/QtNetwork/QTcpSocket \
 		SMsg.h \
 		MsgType.h \
 		Stars.h
-	/usr/local/lib/qt5/bin/moc $(DEFINES) -I/usr/local/lib/qt5/mkspecs/freebsd-clang -I/usr/home/tabuchi/prog/qct08 -I/usr/home/tabuchi/prog/qct08 -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtNetwork -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtCore -I/usr/local/include -I/usr/include/c++/v1 -I/usr/include/clang/3.4.1 -I/usr/include Stars.h -o moc_Stars.cpp
+	/usr/local/lib/qt5/bin/moc $(DEFINES) -I/usr/local/lib/qt5/mkspecs/freebsd-clang -I/usr/home/tabuchi/prog/qct08 -I/usr/home/tabuchi/prog/qct08 -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtNetwork -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtCore -I/usr/local/include -I/usr/include/c++/v1 -I/usr/include/c++/4.2 -I/usr/include/c++/4.2/backward -I/usr/include/clang/3.3 -I/usr/include Stars.h -o moc_Stars.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:

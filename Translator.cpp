@@ -4,7 +4,30 @@ void Body::AnsIsBusy( SMsg msg )
 {
   smsg = msg;
   s->SendAns( msg,
-	      QString( "@%1 %2" ).arg( msg.Msg() ).arg( busy ? 1 : 0 ) );
+	      QString( "@%1 %2" ).arg( msg.Msg() ).arg( CT->isBusy() ? 1 : 0 ) );
+}
+
+void Body::changedCTIsBusy( bool busy )
+{
+  qDebug() << Config[ "NAME_ON_STARS" ] << QString( "_ChangedIsBusy %1" ).arg( busy ? 1 : 0 );
+  s->SendEvent( Config[ "NAME_ON_STARS" ], QString( "_ChangedIsBusy %1" ).arg( busy ? 1 : 0 ) );
+}
+
+void Body::AnsReset( SMsg msg )
+{
+  initialized = false;
+  gotData = false;
+  finalized = false;
+
+  smsg = msg;
+  CT->QueCmd( false, "STOP" );
+  CT->QueCmd( false, "CLAL" );
+  CT->QueCmd( false, "GATEIN_EN" );   // default でこれになってるはず。念の為
+
+  disconnect( CT, SIGNAL( received( CTMsg ) ) );
+  CT->SendCmd();
+  s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
+  // 返答を待たず Ok:
 }
 
 void Body::AnsGetValue( SMsg msg )
@@ -18,28 +41,60 @@ void Body::AnsGetValue( SMsg msg )
     CT->QueCmd( false, cmd );
     
     recSeq = 0;
-    disconnect( CT, SIGNAL( received( CTMsg ) ) );
     connect( CT, SIGNAL( received( CTMsg ) ), this, SLOT( ansGetValue( CTMsg ) ) );
     CT->SendCmd();
   }
 }
 
-void Body::AnsReset( SMsg msg )
+
+void Body::simpleSend( QString cmd, SMsg msg )
 {
-  initialized = false;
-  gotData = false;
-  finalized = false;
-  busy = false;
-
   smsg = msg;
-  CT->QueCmd( false, "STOP" );
-  CT->QueCmd( false, "CLAL" );
-  CT->QueCmd( false, "GATEIN_EN" );   // default でこれになってるはず。念の為
+  CT->QueCmd( false, cmd );
 
+  recSeq = 0;
   disconnect( CT, SIGNAL( received( CTMsg ) ) );
   CT->SendCmd();
   s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   // 返答を待たず Ok:
+}
+
+void Body::AnsSetTimerPreset( SMsg msg )
+{
+  QString cmd = QString( "STPR%1" ).arg( msg.Val() );
+  simpleSend( cmd, msg );
+}
+
+void Body::AnsCounterReset( SMsg msg )
+{
+  simpleSend( "CLAL", msg );
+}
+
+void Body::AnsCountStart( SMsg msg )
+{
+  simpleSend( "STRT", msg );
+};
+
+void Body::AnsSetStopMode( SMsg msg )
+{
+  QString cmd = "";
+  if ( msg.Val() == "N" )
+    cmd = "DSAS";
+  if ( msg.Val() == "T" )
+    cmd = "ENTS";
+  if ( msg.Val() == "C" )
+    cmd = "ENCS";
+
+  if ( cmd == "" ) {
+    s->SendAns( msg, "@SetStopMode Er:" );
+  } else {
+    simpleSend( cmd, msg );
+  }
+}
+
+void Body::AnsStop( SMsg msg )
+{
+  simpleSend( "STOP", msg );
 }
 
 void Body::AnsQInitialize( SMsg msg )
@@ -124,6 +179,7 @@ void Body::AnsQFinalize( SMsg msg )
 void Body::ansGetValue( CTMsg msg )
 {
   // recSeq に従って動作をすすめる (GetValue は 1step)
+  disconnect( CT, SIGNAL( received( CTMsg ) ), this, SLOT( ansGetValue( CTMsg ) ) );
   s->SendAns( smsg, QString( "%1" ).arg( msg.msg().toInt() ) );
 }
 
@@ -131,3 +187,8 @@ void Body::ansGetData( void )
 {
   // recSeq に従って動作をすすめる (GetData は 2step)
 }
+
+
+
+
+

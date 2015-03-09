@@ -59,8 +59,15 @@ signals:
   void ReConnected( void );
 
   void AskIsBusy( SMsg msg );
-  void AskGetValue( SMsg msg );
   void AskReset( SMsg msg );
+  void AskGetValue( SMsg msg );
+  void AskSetTimerPreset( SMsg msg );
+  void AskCounterReset( SMsg msg );
+  void AskCountStart( SMsg msg );
+
+  void AskSetStopMode( SMsg msg );
+  void AskStop( SMsg msg );
+
   void AskQInitialize( SMsg msg );
   void AskQGetData( SMsg msg );
   void AskQFinalize( SMsg msg );

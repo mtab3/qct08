@@ -7,7 +7,6 @@ Body::Body()
   if ( ! ReadConfig() )
     return;
 
-  busy = false;
   recSeq = 0;
   
   initialized = false;
@@ -28,9 +27,10 @@ void Body::SetUpCT08Connection( void )
   CT = new CT08;
 
   connect( CT, SIGNAL( NewMsg( SMsg, CTMsg )), this, SLOT( ParseAns( SMsg, CTMsg ) ), Qt::UniqueConnection );
+  connect( CT, SIGNAL( changedIsBusy( bool ) ), this, SLOT( changedCTIsBusy( bool ) ), Qt::UniqueConnection );
+
   CT->Connect( Config[ "CT08_IP" ], Config[ "CT08_PORT" ] );
 }
-
 
 void Body::SetUpStarsConnection( void )
 {
@@ -47,8 +47,16 @@ void Body::SetUpStarsConnection( void )
 
   // Stars Message
   connect( s, SIGNAL( AskIsBusy( SMsg ) ), this, SLOT( AnsIsBusy( SMsg ) ), Qt::UniqueConnection );
-  connect( s, SIGNAL( AskGetValue( SMsg ) ), this, SLOT( AnsGetValue( SMsg ) ), Qt::UniqueConnection );
+
   connect( s, SIGNAL( AskReset( SMsg ) ), this, SLOT( AnsReset( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskGetValue( SMsg ) ), this, SLOT( AnsGetValue( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskSetTimerPreset( SMsg ) ), this, SLOT( AnsSetTimerPreset( SMsg ) ), Qt:: UniqueConnection );
+  connect( s, SIGNAL( AskCounterReset( SMsg ) ), this, SLOT( AnsCounterReset( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskCountStart( SMsg ) ), this, SLOT( AnsCountStart( SMsg ) ), Qt::UniqueConnection );
+
+  connect( s, SIGNAL( AskSetStopMode( SMsg ) ), this, SLOT( AnsSetStopMode( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskStop( SMsg ) ), this, SLOT( AnsStop( SMsg ) ), Qt::UniqueConnection );
+  
   connect( s, SIGNAL( AskQInitialize( SMsg ) ), this, SLOT( AnsQInitialize( SMsg ) ), Qt::UniqueConnection );
   connect( s, SIGNAL( AskQGetData( SMsg ) ), this, SLOT( AnsQGetData( SMsg ) ), Qt::UniqueConnection );
   connect( s, SIGNAL( AskQFinalize( SMsg ) ), this, SLOT( AnsQFinalize( SMsg ) ), Qt::UniqueConnection );
@@ -57,4 +65,3 @@ void Body::SetUpStarsConnection( void )
   s->SetNewSVPort( Config["STARS_PORT"] );
   s->MakeConnection();
 }
-

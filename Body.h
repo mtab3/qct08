@@ -17,7 +17,6 @@ class Body : public QObject
   CT08 *CT;
   Stars *s;
 
-  bool busy;
   bool initialized;
   bool gotData;
   bool finalized;
@@ -26,6 +25,7 @@ class Body : public QObject
   
   SMsg smsg;
 
+  void simpleSend( QString cmd, SMsg msg );
   bool ReadConfig( void );
   void SetUp( void );
   void SetUpCT08Connection( void );
@@ -37,14 +37,24 @@ public:
 
 private slots:
   void AnsIsBusy( SMsg msg );
-  void AnsGetValue( SMsg msg );
+
   void AnsReset( SMsg msg );
+  void AnsGetValue( SMsg msg );
+  void AnsSetTimerPreset( SMsg msg );
+  void AnsCounterReset( SMsg msg );
+  void AnsCountStart( SMsg msg );
+
+  void AnsSetStopMode( SMsg msg );
+  void AnsStop( SMsg msg );
+
   void AnsQInitialize( SMsg msg );
   void AnsQGetData( SMsg msg );
   void AnsQFinalize( SMsg msg );
 
   void ansGetValue( CTMsg msg );
   void ansGetData( void );
+
+  void changedCTIsBusy( bool busy );
 signals:
   
 };

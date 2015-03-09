@@ -24,6 +24,7 @@ class CT08 : public QObject
   Q_OBJECT
 
   bool Connected;
+  bool busy;
   QTimer *t;
 
   QString CTIP;
@@ -43,6 +44,7 @@ public:
   CT08( void );
   ~CT08( void );
 
+  bool isBusy( void ) { return busy; };
   void Connect( QString aip, QString aport );
   void QueCmd( bool waitf, QString cmd );
   void SendCmd( void );
@@ -51,6 +53,7 @@ public slots:
 
 signals:
   void received( CTMsg msg );
+  void changedIsBusy( bool busy );
 };
 
 #endif

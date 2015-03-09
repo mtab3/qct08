@@ -158,17 +158,30 @@ void Stars::ReceiveMessageFromStars( void )
         switch( smsg.Msgt() ) {
         case ISBUSY:
           emit AskIsBusy( smsg ); break;
-        case GETVALUE:
-          emit AskGetValue( smsg ); break;
+
         case RESET:
           emit AskReset( smsg ); break;
-        case QINITIALIZE:
+        case GETVALUE:
+          emit AskGetValue( smsg ); break;
+	case SETTIMERPRESET:
+	  emit AskSetTimerPreset( smsg ); break;
+	case COUNTERRESET:
+	  emit AskCounterReset( smsg ); break;
+	case COUNTSTART:
+	  emit AskCountStart( smsg ); break;
+
+	case SETSTOPMODE:
+	  emit AskSetStopMode( smsg ); break;
+	case STOP:
+	  emit AskStop( smsg ); break;
+	  
+	case QINITIALIZE:
           emit AskQInitialize( smsg ); break;
         case QGETDATA:
           emit AskQGetData( smsg ); break;
         case QFINALIZE:
           emit AskQFinalize( smsg ); break;
-
+	  
         default:
           SendAns( smsg, "Er: Undefined Command" );
           break;
@@ -196,6 +209,7 @@ void Stars::ReceiveMessageFromStars( void )
 
 void Stars::SendAns( SMsg msg, QString ans )
 {
+  qDebug() << "Ans " << ans;
   QString aLine = msg.To() + ">" + msg.From() + " " + ans + "\n";
   ss->write( aLine.toLatin1() );
 }

@@ -5,24 +5,36 @@
 #define BRANCH_NAME ( "master" )
 #define GITLOGS ""\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Tue Apr 15 15:32:40 2014 +0900\n"\
-                "    AMsg was changed\n"\
+                "Date        : Fri Dec 19 22:40:58 2014 +0900\n"\
+                "    GetValue works\n"\
 		"\n"\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Tue Apr 15 12:59:10 2014 +0900\n"\
-                "    add SET...SPEEDs in switch-case in Translator.cpp\n"\
+                "Date        : Fri Dec 19 18:02:48 2014 +0900\n"\
+                "    remove binary file\n"\
 		"\n"\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Mon Apr 14 14:02:54 2014 +0900\n"\
-                "    while working on SetSpeed, I will suspend it to implement some codes to read initial status of ARIES\n"\
+                "Date        : Sun Dec 14 15:45:29 2014 +0900\n"\
+                "    working on Translator and ct08\n"\
+		"\n"\
+                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Fri Dec 12 16:32:30 2014 +0900\n"\
+                "    simplified\n"\
+		"\n"\
+                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Fri Dec 12 13:35:22 2014 +0900\n"\
+                "    clean up codes by erasing the lines come from ARIESDriver, and not using the 'Que'\n"\
+		"\n"\
+                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu Dec 11 22:35:55 2014 +0900\n"\
+                "    working\n"\
+		"\n"\
+                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu Dec 11 22:34:59 2014 +0900\n"\
+                "    working on Translator\n"\
 		"\n"\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Mon Apr 14 13:39:59 2014 +0900\n"\
-                "    NAME_ON_STARS key word add in cfg file, to give correct sender-name in returning message generated in ARIES.cpp\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Fri Apr 11 20:53:57 2014 +0900\n"\
-                "    it looks Standby/SyncRun works\n"\
+                "Date        : Thu Dec 11 20:42:38 2014 +0900\n"\
+                "    working\n"\
 		"\n"\
                 ""
 #endif

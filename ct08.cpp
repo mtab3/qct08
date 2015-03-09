@@ -7,6 +7,9 @@ CT08::CT08( void )
   CTPORT = "7777";
   ss = NULL;
 
+  busy = false;
+  emit changedIsBusy( busy );
+
   cmdq.clear();
   RBuf[0] = '\0';
 
@@ -14,6 +17,7 @@ CT08::CT08( void )
   t = new QTimer;
   t->setInterval( 100 );
   connect( t, SIGNAL( timeout() ), this, SLOT( watch() ), Qt::UniqueConnection );
+  t->start();
 }
 
 CT08::~CT08( void )
@@ -53,10 +57,24 @@ void CT08::RcvMessage( void )
       p++;
     }
 
-    CTMsg ctmsg;
-    ctmsg.ParseMsg( QString( RBuf ) );
-    RBuf[0] = '\0';
-    emit received( ctmsg );
+    if ( strncmp( RBuf, "flag2 = ", 8 ) == 0 ) {
+      if ( QString( RBuf ).mid( 8, 2 ).toInt( 0, 16 ) & 0x20 ) {
+	if ( ! busy ) {
+	  busy = true;
+	  emit changedIsBusy( busy );
+	}
+      } else {
+	if ( busy ) {
+	  busy = false;
+	  emit changedIsBusy( busy );
+	}
+      }
+    } else {
+      CTMsg ctmsg;
+      ctmsg.ParseMsg( QString( RBuf ) );
+      RBuf[0] = '\0';
+      emit received( ctmsg );
+    }
   }
 }
 
@@ -71,20 +89,19 @@ void CT08::QueCmd( bool waitf, QString cmd )
 
 void CT08::SendCmd( void )
 {
-  // タイマーをかけて コマンド送信のサブファンクションを呼ぶ
-  // 先頭が % のコマンドは応答を待つ、# は応答を待たない
   while( cmdq.count() > 0 ) {
-
     QByteArray Cmd = cmdq[0]->cmd.toLatin1() + "\x0d\x0a\0";
     ss->write( Cmd.data() );
     RBuf[0] = '\0';
-
     cmdq.remove( 0 );
   }
 }
 
 void CT08::watch( void )
 {
+  QByteArray Cmd = QString( "FLG?2" ).toLatin1() + "\x0d\x0a\0";
+  ss->write( Cmd.data() );
+  RBuf[0] = '\0';
 }
 
 
