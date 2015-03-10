@@ -140,8 +140,6 @@ DIST          = ../../../../local/lib/qt5/mkspecs/features/spec_pre.prf \
 		../../../../local/lib/qt5/mkspecs/modules/qt_lib_svg_private.pri \
 		../../../../local/lib/qt5/mkspecs/modules/qt_lib_testlib.pri \
 		../../../../local/lib/qt5/mkspecs/modules/qt_lib_testlib_private.pri \
-		../../../../local/lib/qt5/mkspecs/modules/qt_lib_uitools.pri \
-		../../../../local/lib/qt5/mkspecs/modules/qt_lib_uitools_private.pri \
 		../../../../local/lib/qt5/mkspecs/modules/qt_lib_webkit.pri \
 		../../../../local/lib/qt5/mkspecs/modules/qt_lib_webkit_private.pri \
 		../../../../local/lib/qt5/mkspecs/modules/qt_lib_webkitwidgets.pri \
@@ -283,8 +281,6 @@ Makefile: qct08.pro ../../../../local/lib/qt5/mkspecs/freebsd-clang/qmake.conf .
 		../../../../local/lib/qt5/mkspecs/modules/qt_lib_svg_private.pri \
 		../../../../local/lib/qt5/mkspecs/modules/qt_lib_testlib.pri \
 		../../../../local/lib/qt5/mkspecs/modules/qt_lib_testlib_private.pri \
-		../../../../local/lib/qt5/mkspecs/modules/qt_lib_uitools.pri \
-		../../../../local/lib/qt5/mkspecs/modules/qt_lib_uitools_private.pri \
 		../../../../local/lib/qt5/mkspecs/modules/qt_lib_webkit.pri \
 		../../../../local/lib/qt5/mkspecs/modules/qt_lib_webkit_private.pri \
 		../../../../local/lib/qt5/mkspecs/modules/qt_lib_webkitwidgets.pri \
@@ -391,8 +387,6 @@ Makefile: qct08.pro ../../../../local/lib/qt5/mkspecs/freebsd-clang/qmake.conf .
 ../../../../local/lib/qt5/mkspecs/modules/qt_lib_svg_private.pri:
 ../../../../local/lib/qt5/mkspecs/modules/qt_lib_testlib.pri:
 ../../../../local/lib/qt5/mkspecs/modules/qt_lib_testlib_private.pri:
-../../../../local/lib/qt5/mkspecs/modules/qt_lib_uitools.pri:
-../../../../local/lib/qt5/mkspecs/modules/qt_lib_uitools_private.pri:
 ../../../../local/lib/qt5/mkspecs/modules/qt_lib_webkit.pri:
 ../../../../local/lib/qt5/mkspecs/modules/qt_lib_webkit_private.pri:
 ../../../../local/lib/qt5/mkspecs/modules/qt_lib_webkitwidgets.pri:
@@ -473,17 +467,17 @@ moc_Body.cpp: ../../../../local/include/qt5/QtCore/QObject \
 		../../../../local/include/qt5/QtCore/qglobal.h \
 		../../../../local/include/qt5/QtCore/qconfig.h \
 		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/qfeatures.h \
 		../../../../local/include/qt5/QtCore/qsystemdetection.h \
 		../../../../local/include/qt5/QtCore/qprocessordetection.h \
@@ -726,17 +720,17 @@ moc_ct08.cpp: ../../../../local/include/qt5/QtCore/QtCore \
 		../../../../local/include/qt5/QtCore/qglobal.h \
 		../../../../local/include/qt5/QtCore/qconfig.h \
 		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/qfeatures.h \
 		../../../../local/include/qt5/QtCore/qsystemdetection.h \
 		../../../../local/include/qt5/QtCore/qprocessordetection.h \
@@ -972,17 +966,17 @@ moc_Stars.cpp: ../../../../local/include/qt5/QtNetwork/QTcpSocket \
 		../../../../local/include/qt5/QtCore/qglobal.h \
 		../../../../local/include/qt5/QtCore/qconfig.h \
 		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/qfeatures.h \
 		../../../../local/include/qt5/QtCore/qsystemdetection.h \
 		../../../../local/include/qt5/QtCore/qprocessordetection.h \
@@ -1069,17 +1063,17 @@ Body.o: Body.cpp ../../../../local/include/qt5/QtCore/QTimer \
 		../../../../local/include/qt5/QtCore/qglobal.h \
 		../../../../local/include/qt5/QtCore/qconfig.h \
 		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/qfeatures.h \
 		../../../../local/include/qt5/QtCore/qsystemdetection.h \
 		../../../../local/include/qt5/QtCore/qprocessordetection.h \
@@ -1325,17 +1319,17 @@ ct08.o: ct08.cpp ct08.h \
 		../../../../local/include/qt5/QtCore/qglobal.h \
 		../../../../local/include/qt5/QtCore/qconfig.h \
 		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/qfeatures.h \
 		../../../../local/include/qt5/QtCore/qsystemdetection.h \
 		../../../../local/include/qt5/QtCore/qprocessordetection.h \
@@ -1570,17 +1564,17 @@ ct08Msg.o: ct08Msg.cpp ct08Msg.h \
 		../../../../local/include/qt5/QtCore/qglobal.h \
 		../../../../local/include/qt5/QtCore/qconfig.h \
 		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/qfeatures.h \
 		../../../../local/include/qt5/QtCore/qsystemdetection.h \
 		../../../../local/include/qt5/QtCore/qprocessordetection.h \
@@ -1639,17 +1633,17 @@ main.o: main.cpp ../../../../local/include/qt5/QtCore/QCoreApplication \
 		../../../../local/include/qt5/QtCore/qglobal.h \
 		../../../../local/include/qt5/QtCore/qconfig.h \
 		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/qfeatures.h \
 		../../../../local/include/qt5/QtCore/qsystemdetection.h \
 		../../../../local/include/qt5/QtCore/qprocessordetection.h \
@@ -1894,17 +1888,17 @@ MsgType.o: MsgType.cpp MsgType.h \
 		../../../../local/include/qt5/QtCore/qglobal.h \
 		../../../../local/include/qt5/QtCore/qconfig.h \
 		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/qfeatures.h \
 		../../../../local/include/qt5/QtCore/qsystemdetection.h \
 		../../../../local/include/qt5/QtCore/qprocessordetection.h \
@@ -1946,17 +1940,17 @@ ReadConfig.o: ReadConfig.cpp Body.h \
 		../../../../local/include/qt5/QtCore/qglobal.h \
 		../../../../local/include/qt5/QtCore/qconfig.h \
 		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/qfeatures.h \
 		../../../../local/include/qt5/QtCore/qsystemdetection.h \
 		../../../../local/include/qt5/QtCore/qprocessordetection.h \
@@ -2196,17 +2190,17 @@ SMsg.o: SMsg.cpp MsgType.h \
 		../../../../local/include/qt5/QtCore/qglobal.h \
 		../../../../local/include/qt5/QtCore/qconfig.h \
 		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/qfeatures.h \
 		../../../../local/include/qt5/QtCore/qsystemdetection.h \
 		../../../../local/include/qt5/QtCore/qprocessordetection.h \
@@ -2267,17 +2261,17 @@ Stars.o: Stars.cpp ../../../../local/include/qt5/QtCore/QTextStream \
 		../../../../local/include/qt5/QtCore/qglobal.h \
 		../../../../local/include/qt5/QtCore/qconfig.h \
 		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/qfeatures.h \
 		../../../../local/include/qt5/QtCore/qsystemdetection.h \
 		../../../../local/include/qt5/QtCore/qprocessordetection.h \
@@ -2362,17 +2356,17 @@ Translator.o: Translator.cpp Body.h \
 		../../../../local/include/qt5/QtCore/qglobal.h \
 		../../../../local/include/qt5/QtCore/qconfig.h \
 		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
 		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
+		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
 		../../../../local/include/qt5/QtCore/qfeatures.h \
 		../../../../local/include/qt5/QtCore/qsystemdetection.h \
 		../../../../local/include/qt5/QtCore/qprocessordetection.h \

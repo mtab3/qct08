@@ -16,7 +16,10 @@ struct aQue {
   QString cmd;
   bool waitf;
 
-  aQue( void ) { cmd.clear(); waitf = false; };
+  QObject *from, *to;
+  char *signal, *slot;
+
+  aQue( void ) { cmd.clear(); waitf = false; from = to = NULL; signal = slot = NULL; };
 };
 
 class CT08 : public QObject
@@ -46,7 +49,9 @@ public:
 
   bool isBusy( void ) { return busy; };
   void Connect( QString aip, QString aport );
-  void QueCmd( bool waitf, QString cmd );
+  void QueCmd( bool waitf, QString cmd,
+	       QObject *from = NULL, const char *signal = NULL,
+	       QObject *to = NULL,   const char *slot = NULL );
   void SendCmd( void );
 
 public slots:

@@ -38,10 +38,10 @@ void Body::AnsGetValue( SMsg msg )
   } else {
     int ch = ChName2Num[ msg.ToCh() ];
     QString cmd = QString( "CTR?%1" ).arg( ch, 2, 10, QChar( '0' ) );
-    CT->QueCmd( false, cmd );
-    
+    CT->QueCmd( false, cmd,
+		CT, SIGNAL( received( CTMsg ) ),
+		this, SLOT( ansGetValue( CTMsg ) ) );
     recSeq = 0;
-    connect( CT, SIGNAL( received( CTMsg ) ), this, SLOT( ansGetValue( CTMsg ) ) );
     CT->SendCmd();
   }
 }
@@ -103,8 +103,7 @@ void Body::AnsQInitialize( SMsg msg )
   if ( msg.ToCh() == "" ) {
     s->SendAns( msg, QString( "@%1 Er:" ).arg( msg.Msg() ) );
   } else {
-    int ch = ChName2Num[ msg.ToCh() ];
-
+    //    int ch = ChName2Num[ msg.ToCh() ];
     if ( ! initialized ) {          // 連続で何回も呼ばれても先頭の一回だけ
       CT->QueCmd( false, "STOP" );        // カウントしてても止める
       CT->QueCmd( false, "CLGSDN" );      // データ記録番地 0 にセット

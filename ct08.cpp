@@ -1,4 +1,4 @@
-
+#include <strings.h>
 #include "ct08.h"
 
 CT08::CT08( void )
@@ -78,11 +78,17 @@ void CT08::RcvMessage( void )
   }
 }
 
-void CT08::QueCmd( bool waitf, QString cmd )
+void CT08::QueCmd( bool waitf, QString cmd,
+		   QObject *from, const char *signal,
+		   QObject *to,   const char *slot )
 {
   aQue *que = new aQue;
   que->cmd = cmd;
   que->waitf = waitf;
+  que->from = from;
+  que->signal = strdup( signal );
+  que->to = to;
+  que->slot = strdup( slot );
 
   cmdq << que;
 }
@@ -90,6 +96,11 @@ void CT08::QueCmd( bool waitf, QString cmd )
 void CT08::SendCmd( void )
 {
   while( cmdq.count() > 0 ) {
+    if ( cmdq[0]->from != NULL ) {
+      connect( cmdq[0]->from, cmdq[0]->signal, cmdq[0]->to, cmdq[0]->slot );
+    }
+    if ( cmdq[0]->signal != NULL ) free( cmdq[0]->signal );
+    if ( cmdq[0]->slot != NULL ) free( cmdq[0]->slot );
     QByteArray Cmd = cmdq[0]->cmd.toLatin1() + "\x0d\x0a\0";
     ss->write( Cmd.data() );
     RBuf[0] = '\0';
