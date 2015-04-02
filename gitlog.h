@@ -4,6 +4,10 @@
 
 #define BRANCH_NAME ( "newQue" )
 #define GITLOGS ""\
+                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Tue Mar 10 14:27:17 2015 +0900\n"\
+                "    working\n"\
+		"\n"\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Mon Mar 9 20:49:27 2015 +0900\n"\
                 "    a problem in disconnect when receive ans from CT shuld be resolved\n"\
@@ -39,10 +43,6 @@
                 "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Thu Dec 11 22:34:59 2014 +0900\n"\
                 "    working on Translator\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu Dec 11 20:42:38 2014 +0900\n"\
-                "    working\n"\
 		"\n"\
                 ""
 #endif
