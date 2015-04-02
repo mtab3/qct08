@@ -5,6 +5,18 @@
 #define BRANCH_NAME ( "master" )
 #define GITLOGS ""\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu Apr 2 20:27:15 2015 +0900\n"\
+                "    monitor can be conducted with this version\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu Apr 2 20:25:49 2015 +0900\n"\
+                "    monitor can be conducted with this version\n"\
+		"\n"\
+                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Tue Mar 10 15:16:16 2015 +0900\n"\
+                "    debugging\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Mon Mar 9 20:49:27 2015 +0900\n"\
                 "    a problem in disconnect when receive ans from CT shuld be resolved\n"\
 		"\n"\
@@ -31,18 +43,6 @@
                 "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Fri Dec 12 13:35:22 2014 +0900\n"\
                 "    clean up codes by erasing the lines come from ARIESDriver, and not using the 'Que'\n"\
-		"\n"\
-                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu Dec 11 22:35:55 2014 +0900\n"\
-                "    working\n"\
-		"\n"\
-                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu Dec 11 22:34:59 2014 +0900\n"\
-                "    working on Translator\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu Dec 11 20:42:38 2014 +0900\n"\
-                "    working\n"\
 		"\n"\
                 ""
 #endif
