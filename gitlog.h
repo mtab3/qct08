@@ -4,6 +4,22 @@
 
 #define BRANCH_NAME ( "newQue" )
 #define GITLOGS ""\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu Apr 2 20:31:19 2015 +0900\n"\
+                "    merged with master\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu Apr 2 20:27:15 2015 +0900\n"\
+                "    monitor can be conducted with this version\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu Apr 2 20:25:49 2015 +0900\n"\
+                "    monitor can be conducted with this version\n"\
+		"\n"\
+                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Tue Mar 10 15:16:16 2015 +0900\n"\
+                "    debugging\n"\
+		"\n"\
                 "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Tue Mar 10 14:27:17 2015 +0900\n"\
                 "    working\n"\
@@ -27,22 +43,6 @@
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Sun Dec 14 15:45:29 2014 +0900\n"\
                 "    working on Translator and ct08\n"\
-		"\n"\
-                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Fri Dec 12 16:32:30 2014 +0900\n"\
-                "    simplified\n"\
-		"\n"\
-                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Fri Dec 12 13:35:22 2014 +0900\n"\
-                "    clean up codes by erasing the lines come from ARIESDriver, and not using the 'Que'\n"\
-		"\n"\
-                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu Dec 11 22:35:55 2014 +0900\n"\
-                "    working\n"\
-		"\n"\
-                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu Dec 11 22:34:59 2014 +0900\n"\
-                "    working on Translator\n"\
 		"\n"\
                 ""
 #endif

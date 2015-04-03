@@ -149,7 +149,7 @@ void Body::AnsQGetData( SMsg msg )
       CT->SendCmd();
     };
     
-    s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
+    //    s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   }
 }
 
@@ -185,6 +185,7 @@ void Body::ansGetValue( CTMsg msg )
 void Body::ansGetData( void )
 {
   // recSeq に従って動作をすすめる (GetData は 2step)
+  //  s->SendAns( smsg, QString( "@qGetData %1" ).arg( msg.msg().toInt() ) );
 }
 
 

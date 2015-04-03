@@ -88,9 +88,15 @@ void CT08::QueCmd( bool waitf, QString cmd,
   que->cmd = cmd;
   que->waitf = waitf;
   que->from = from;
-  que->signal = strdup( signal );
+  if ( signal != NULL )
+    que->signal = strdup( signal );
+  else
+    que->signal = NULL;
   que->to = to;
-  que->slot = strdup( slot );
+  if ( slot != NULL )
+    que->slot = strdup( slot );
+  else
+    que->slot = NULL;
 
   cmdq << que;
 }
