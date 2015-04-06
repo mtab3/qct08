@@ -51,8 +51,9 @@ private slots:
   void AnsQGetData( SMsg msg );
   void AnsQFinalize( SMsg msg );
 
-  void ansGetValue( CTMsg msg );
-  void ansGetData( void );
+  void ansGetValue( CTMsg msg, SMsg smsg );
+  void ansNowDataNo( CTMsg msg, SMsg smsg );
+  void ansGetData( CTMsg msg, SMsg smsg );
 
   void changedCTIsBusy( bool busy );
 signals:

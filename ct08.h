@@ -15,6 +15,7 @@
 struct aQue {
   QString cmd;
   bool waitf;
+  SMsg msg;
 
   QObject *from, *to;
   char *signal, *slot;
@@ -28,6 +29,7 @@ class CT08 : public QObject
 
   bool Connected;
   bool busy;
+  bool blocking;
   QTimer *t;
 
   QString CTIP;
@@ -35,6 +37,7 @@ class CT08 : public QObject
   QTcpSocket *ss;
 
   QVector<aQue*> cmdq;
+  SMsg sMsg;
 
   char rBuf[ BUFSIZE + 1 ];
   char RBuf[ BUFSIZE + 1 ];
@@ -49,15 +52,16 @@ public:
 
   bool isBusy( void ) { return busy; };
   void Connect( QString aip, QString aport );
-  void QueCmd( bool waitf, QString cmd,
+  void QueCmd( bool waitf, QString cmd, SMsg smsg, 
 	       QObject *from = NULL, const char *signal = NULL,
 	       QObject *to = NULL,   const char *slot = NULL );
   void SendCmd( void );
-
+  void SendACmd( QString cmd );
+		      
 public slots:
 
 signals:
-  void received( CTMsg msg );
+  void received( CTMsg msg, SMsg smsg );
   void changedIsBusy( bool busy );
 };
 

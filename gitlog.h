@@ -5,6 +5,18 @@
 #define BRANCH_NAME ( "newQue" )
 #define GITLOGS ""\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Fri Apr 3 14:56:09 2015 +0900\n"\
+                "    working\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Fri Apr 3 11:27:39 2015 +0900\n"\
+                "    new cfg\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu Apr 2 21:20:21 2015 +0900\n"\
+                "    working on QXAFS mode\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Thu Apr 2 20:31:19 2015 +0900\n"\
                 "    merged with master\n"\
 		"\n"\
@@ -31,18 +43,6 @@
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Mon Mar 9 20:28:22 2015 +0900\n"\
                 "    it may work as stndard nct08 driver for XafsM2\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Fri Dec 19 22:40:58 2014 +0900\n"\
-                "    GetValue works\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Fri Dec 19 18:02:48 2014 +0900\n"\
-                "    remove binary file\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Sun Dec 14 15:45:29 2014 +0900\n"\
-                "    working on Translator and ct08\n"\
 		"\n"\
                 ""
 #endif

@@ -20,12 +20,10 @@ void Body::AnsReset( SMsg msg )
   finalized = false;
 
   smsg = msg;
-  CT->QueCmd( false, "STOP" );
-  CT->QueCmd( false, "CLAL" );
-  CT->QueCmd( false, "GATEIN_EN" );   // default でこれになってるはず。念の為
+  CT->SendACmd( "STOP" );
+  CT->SendACmd( "CLAL" );
+  CT->SendACmd( "GATEIN_EN" );   // default でこれになってるはず。念の為
 
-  disconnect( CT, SIGNAL( received( CTMsg ) ) );
-  CT->SendCmd();
   s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   // 返答を待たず Ok:
 }
@@ -38,23 +36,18 @@ void Body::AnsGetValue( SMsg msg )
   } else {
     int ch = ChName2Num[ msg.ToCh() ];
     QString cmd = QString( "CTR?%1" ).arg( ch, 2, 10, QChar( '0' ) );
-    CT->QueCmd( false, cmd,
-		CT, SIGNAL( received( CTMsg ) ),
-		this, SLOT( ansGetValue( CTMsg ) ) );
+    CT->QueCmd( true, cmd, msg,
+		CT, SIGNAL( received( CTMsg, SMsg ) ),
+		this, SLOT( ansGetValue( CTMsg, SMsg ) ) );
     recSeq = 0;
     CT->SendCmd();
   }
 }
 
-
 void Body::simpleSend( QString cmd, SMsg msg )
 {
   smsg = msg;
-  CT->QueCmd( false, cmd );
-
-  recSeq = 0;
-  disconnect( CT, SIGNAL( received( CTMsg ) ) );
-  CT->SendCmd();
+  CT->SendACmd( cmd );
   s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   // 返答を待たず Ok:
 }
@@ -72,8 +65,9 @@ void Body::AnsCounterReset( SMsg msg )
 
 void Body::AnsCountStart( SMsg msg )
 {
-  simpleSend( "STRT", msg );
-};
+  CT->SendACmd( "STRT" );
+  s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
+}
 
 void Body::AnsSetStopMode( SMsg msg )
 {
@@ -105,21 +99,18 @@ void Body::AnsQInitialize( SMsg msg )
   } else {
     //    int ch = ChName2Num[ msg.ToCh() ];
     if ( ! initialized ) {          // 連続で何回も呼ばれても先頭の一回だけ
-      CT->QueCmd( false, "STOP" );        // カウントしてても止める
-      CT->QueCmd( false, "CLGSDN" );      // データ記録番地 0 にセット
+      CT->SendACmd( "STOP" );       // カウントしてても止める
+      CT->SendACmd( "CLGSDN" );     // データ記録番地 0 にセット
       // CT->SendCMD( "GSED9999" ); // データ記録最終番地(ここまで来ると収集は止まる)
-      CT->QueCmd( false, "GT_ACQ_DIF" );  // カウントの差分を記録
-      CT->QueCmd( false, "GESTRT" );      // ゲートエッジデータ収集モード
+      CT->SendACmd( "GT_ACQ_DIF" ); // カウントの差分を記録
+      CT->SendACmd( "GESTRT" );     // ゲートエッジデータ収集モード
                                     // 最初のゲート立ち上がりでカウントクリア
                                     // 以降のゲート立ち上がりでカウント記録
       initialized = true;
       gotData = false;
       finalized = false;
-
-      disconnect( CT, SIGNAL( received( CTMsg ) ) );
-      CT->SendCmd();
     }
-    
+
     s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   }
 }
@@ -128,27 +119,29 @@ void Body::AnsQInitialize( SMsg msg )
 
 void Body::AnsQGetData( SMsg msg )
 {
+  qDebug() << "a";
   if ( ( msg.ToCh() == "" ) || ( ! ChName2Num.contains( msg.ToCh() ) ) ){
     s->SendAns( msg, QString( "@%1 Er:" ).arg( msg.Msg() ) );
+    qDebug() << "b";
   } else {
+    qDebug() << "c";
     //    int ch = ChName2Num[ msg.ToCh() ];
 
     if ( ! gotData ) {         // 連続で何回も呼ばれても先頭の一回だけ
-      CT->QueCmd( false, "STOP" );   // とにかく停止
-      CT->QueCmd( true, "GSDN?" );  // 現在データ番号の読み取り
-      CT->QueCmd( true, "GSDAL?" ); // 現在データ番号までのデータ読み取り
-                               // 各行に全チャンネル+カウンタの値がカンマ区切りで並び
-                               // 現在データ番号分の行数が来る
+      CT->SendACmd( "STOP" );   // とにかく停止
+      CT->QueCmd( true, "GSDN?", msg, // 現在データ番号の読み取り
+		  CT, SIGNAL( received( CTMsg, SMsg ) ),
+		  this, SLOT( ansNowDataNo( CTMsg, SMsg ) ) );
+      CT->QueCmd( true, "GSDAL?", msg, // 現在データ番号までのデータ読み取り
+		  CT, SIGNAL( received( CTMsg, SMsg ) ),
+		  this, SLOT( ansGetData( CTMsg, SMsg ) ) );
+
       initialized = false;
       gotData = true;
       finalized = false;
 
-      recSeq = 0;
-      disconnect( CT, SIGNAL( received( CTMsg ) ) );
-      connect( CT, SIGNAL( received() ), this, SLOT( ansGetData() ) );
       CT->SendCmd();
     };
-    
     //    s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   }
 }
@@ -161,30 +154,34 @@ void Body::AnsQFinalize( SMsg msg )
     //    int ch = ChName2Num[ msg.ToCh() ];
 
     if ( ! finalized ) {        // 連続で何回も呼ばれても先頭の一回だけ
-      CT->QueCmd( false, "STOP" );    // とにかく止めておく
+      CT->SendACmd( "STOP" );    // とにかく止めておく
       
       initialized = false;
       gotData = false;
       finalized = true;
-
-      disconnect( CT, SIGNAL( received( CTMsg ) ) );
-      CT->SendCmd();
     }
 
     //    CT->SendCMD( msg, QString( "STP%1" ).arg( ch ), "/0" );
   }
 }
 
-void Body::ansGetValue( CTMsg msg )
+void Body::ansGetValue( CTMsg msg, SMsg smsg )
 {
+  qDebug() << "ctmsg " << msg.msg();
   // recSeq に従って動作をすすめる (GetValue は 1step)
-  disconnect( CT, SIGNAL( received( CTMsg ) ), this, SLOT( ansGetValue( CTMsg ) ) );
+  disconnect( CT, SIGNAL( received( CTMsg, SMsg ) ),
+	      this, SLOT( ansGetValue( CTMsg, SMsg ) ) );
   s->SendAns( smsg, QString( "@GetValue %1" ).arg( msg.msg().toInt() ) );
 }
 
-void Body::ansGetData( void )
+void Body::ansNowDataNo( CTMsg /* msg */, SMsg /* smsg */ )
 {
-  // recSeq に従って動作をすすめる (GetData は 2step)
+  qDebug() << "ans now data no";
+}
+
+void Body::ansGetData( CTMsg /* msg */, SMsg /* smsg */ )
+{
+  qDebug() << "ans get data";
   //  s->SendAns( smsg, QString( "@qGetData %1" ).arg( msg.msg().toInt() ) );
 }
 

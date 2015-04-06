@@ -27,7 +27,6 @@ void Body::SetUpCT08Connection( void )
 {
   CT = new CT08;
 
-  connect( CT, SIGNAL( NewMsg( SMsg, CTMsg )), this, SLOT( ParseAns( SMsg, CTMsg ) ), Qt::UniqueConnection );
   connect( CT, SIGNAL( changedIsBusy( bool ) ), this, SLOT( changedCTIsBusy( bool ) ), Qt::UniqueConnection );
 
   CT->Connect( Config[ "CT08_IP" ], Config[ "CT08_PORT" ] );

@@ -8,6 +8,7 @@ CT08::CT08( void )
   ss = NULL;
 
   busy = false;
+  blocking = false;
   emit changedIsBusy( busy );
 
   cmdq.clear();
@@ -72,20 +73,24 @@ void CT08::RcvMessage( void )
 	}
       }
     } else {
+      blocking = false;
       CTMsg ctmsg;
       ctmsg.ParseMsg( QString( RBuf ) );
+      qDebug() << "Receive" << RBuf;
       RBuf[0] = '\0';
-      emit received( ctmsg );
+      emit received( ctmsg, sMsg );
+      SendCmd();
     }
   }
 }
 
-void CT08::QueCmd( bool waitf, QString cmd,
+void CT08::QueCmd( bool waitf, QString cmd, SMsg msg,
 		   QObject *from, const char *signal,
 		   QObject *to,   const char *slot )
 {
   aQue *que = new aQue;
   que->cmd = cmd;
+  que->msg = msg;
   que->waitf = waitf;
   que->from = from;
   if ( signal != NULL )
@@ -103,7 +108,10 @@ void CT08::QueCmd( bool waitf, QString cmd,
 
 void CT08::SendCmd( void )
 {
-  while( cmdq.count() > 0 ) {
+  if ( blocking )
+    return;
+  if ( cmdq.count() > 0 ) {
+    qDebug() << "Send" << cmdq[0]->cmd;
     if ( cmdq[0]->from != NULL ) {
       connect( cmdq[0]->from, cmdq[0]->signal, cmdq[0]->to, cmdq[0]->slot );
     }
@@ -115,11 +123,26 @@ void CT08::SendCmd( void )
       emit changedIsBusy( busy );
       t->start();
     }
-
+    if ( cmdq[0]->waitf )
+      blocking = true;
+    sMsg = cmdq[0]->msg;
     QByteArray Cmd = cmdq[0]->cmd.toLatin1() + "\x0d\x0a\0";
     ss->write( Cmd.data() );
     RBuf[0] = '\0';
     cmdq.remove( 0 );
+  }
+}
+
+void CT08::SendACmd( QString cmd )
+{
+  qDebug() << "Send Single" << cmd;
+  QByteArray Cmd = cmd.toLatin1() + "\x0d\x0a\0";
+  ss->write( Cmd.data() );
+
+  if ( cmd == "STRT" ) {
+    busy = true;
+    emit changedIsBusy( busy );
+    t->start();
   }
 }
 
