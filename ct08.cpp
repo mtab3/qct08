@@ -33,8 +33,7 @@ void CT08::Connect( QString ip, QString port )
   CTPORT = port;
   if ( ss == NULL ) {
     ss = new QTcpSocket;
-    connect( ss, SIGNAL( readyRead( void ) ),
-	     this, SLOT( RcvMessage( void ) ), Qt::UniqueConnection );
+    connect( ss, SIGNAL( readyRead() ), this, SLOT( RcvMessage() ), Qt::UniqueConnection );
     ss->connectToHost( CTIP, CTPORT.toInt() );
     Connected = true;
     //    t->start();
@@ -43,55 +42,56 @@ void CT08::Connect( QString ip, QString port )
 
 void CT08::RcvMessage( void )
 {
-  ss->readLine( rBuf, BUFSIZE );
-  strcat( RBuf, rBuf );
-  char *p = strchr( RBuf, '\x0d' );
-
-  // \r\n を見て、一区切りの通信メッセージであると判断
-  if ( ( p != NULL ) && ( *(p+1) == '\x0a' ) ) {
-    // 制御文字等を消す簡単な整形
-    *p = '\0';
-    p = RBuf;
-    while( *p != '\0' ) {
-      if ( *p < ' ' )
-        *p = ' ';
-      p++;
-    }
-
-    if ( strncmp( RBuf, "flag2 = ", 8 ) == 0 ) {
-      qDebug() << "RBuf" << RBuf << busy;
-      if ( QString( RBuf ).mid( 8, 2 ).toInt( 0, 16 ) & 0x20 ) {
-	if ( ! busy ) {
-	  busy = true;
-	  emit changedIsBusy( busy );
+  while( ! ss->atEnd() ) {
+    ss->readLine( rBuf, BUFSIZE );
+    strcat( RBuf, rBuf );
+    char *p = strchr( RBuf, '\x0d' );
+    //    qDebug() << "read size " << strlen( RBuf );
+    
+    // \r\n を見て、一区切りの通信メッセージであると判断
+    if ( ( p != NULL ) && ( *(p+1) == '\x0a' ) ) {
+      // 制御文字等を消す簡単な整形
+      *p = '\0';
+      p = RBuf;
+      while( *p != '\0' ) {
+	if ( *p < ' ' )
+	  *p = ' ';
+	p++;
+      }
+      
+      if ( strncmp( RBuf, "flag2 = ", 8 ) == 0 ) {
+	qDebug() << "RBuf" << RBuf << busy;
+	if ( QString( RBuf ).mid( 8, 2 ).toInt( 0, 16 ) & 0x20 ) {
+	  if ( ! busy ) {
+	    busy = true;
+	    emit changedIsBusy( busy );
+	  }
+	} else {
+	  if ( busy ) {
+	    busy = false;
+	    emit changedIsBusy( busy );
+	    t->stop();
+	  }
 	}
       } else {
-	if ( busy ) {
-	  busy = false;
-	  emit changedIsBusy( busy );
-	  t->stop();
-	}
+	CTMsg ctmsg;
+	ctmsg.ParseMsg( QString( RBuf ) );
+	//	qDebug() << "Before Emitt!! Receive" << RBuf;
+	RBuf[0] = '\0';
+	emit received( ctmsg, sMsg );
       }
-    } else {
-      blocking = false;
-      CTMsg ctmsg;
-      ctmsg.ParseMsg( QString( RBuf ) );
-      qDebug() << "Receive" << RBuf;
-      RBuf[0] = '\0';
-      emit received( ctmsg, sMsg );
-      SendCmd();
     }
   }
 }
 
-void CT08::QueCmd( bool waitf, QString cmd, SMsg msg,
+void CT08::QueCmd( QString cmd, int size, SMsg msg,
 		   QObject *from, const char *signal,
 		   QObject *to,   const char *slot )
 {
   aQue *que = new aQue;
   que->cmd = cmd;
+  que->size = size;
   que->msg = msg;
-  que->waitf = waitf;
   que->from = from;
   if ( signal != NULL )
     que->signal = strdup( signal );
@@ -104,12 +104,17 @@ void CT08::QueCmd( bool waitf, QString cmd, SMsg msg,
     que->slot = NULL;
 
   cmdq << que;
+  qDebug() << "qued " << cmdq.count();
 }
 
 void CT08::SendCmd( void )
 {
-  if ( blocking )
+  qDebug() << "in SendCmd";
+  if ( blocking ) {
+    qDebug() << "Blocked";
     return;
+  }
+  qDebug() << "rest of que " << cmdq.count();
   if ( cmdq.count() > 0 ) {
     qDebug() << "Send" << cmdq[0]->cmd;
     if ( cmdq[0]->from != NULL ) {
@@ -123,8 +128,7 @@ void CT08::SendCmd( void )
       emit changedIsBusy( busy );
       t->start();
     }
-    if ( cmdq[0]->waitf )
-      blocking = true;
+    blocking = true;
     sMsg = cmdq[0]->msg;
     QByteArray Cmd = cmdq[0]->cmd.toLatin1() + "\x0d\x0a\0";
     ss->write( Cmd.data() );
@@ -144,6 +148,27 @@ void CT08::SendACmd( QString cmd )
     emit changedIsBusy( busy );
     t->start();
   }
+}
+
+QString CT08::SendAndRead( QString cmd, int size )
+{
+  qDebug() << "disConnect";
+  disconnect( ss, SIGNAL( readyRead() ),
+	      this, SLOT( RcvMessage() ) );
+
+  qDebug() << "Send and Read" << cmd;
+  QByteArray Cmd = cmd.toLatin1() + "\x0d\x0a\0";
+  ss->write( Cmd.data() );
+  ss->waitForReadyRead();
+  while( ss->bytesAvailable() < size ) { ss->waitForReadyRead(); };
+  QByteArray rbuf;
+  rbuf.resize( ss->bytesAvailable() );
+  ss->read( rbuf.data(), ss->bytesAvailable() );
+
+  connect( ss, SIGNAL( readyRead() ),
+	   this, SLOT( RcvMessage() ), Qt::UniqueConnection );
+
+  return QString( rbuf.data() );
 }
 
 void CT08::watch( void )

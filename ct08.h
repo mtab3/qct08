@@ -10,17 +10,17 @@
 #include "SMsg.h"
 #include "ct08Msg.h"
 
-#define BUFSIZE ( 2047 )
+#define BUFSIZE ( 2049 )
 
 struct aQue {
   QString cmd;
-  bool waitf;
   SMsg msg;
+  int size;
 
   QObject *from, *to;
   char *signal, *slot;
 
-  aQue( void ) { cmd.clear(); waitf = false; from = to = NULL; signal = slot = NULL; };
+  aQue( void ) { cmd.clear(); size = 0; from = to = NULL; signal = slot = NULL; };
 };
 
 class CT08 : public QObject
@@ -51,12 +51,14 @@ public:
   ~CT08( void );
 
   bool isBusy( void ) { return busy; };
+  void Block( bool block ) { blocking = block; };
   void Connect( QString aip, QString aport );
-  void QueCmd( bool waitf, QString cmd, SMsg smsg, 
+  void QueCmd( QString cmd, int size, SMsg smsg, 
 	       QObject *from = NULL, const char *signal = NULL,
 	       QObject *to = NULL,   const char *slot = NULL );
   void SendCmd( void );
   void SendACmd( QString cmd );
+  QString SendAndRead( QString cmd, int size );
 		      
 public slots:
 

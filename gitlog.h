@@ -5,6 +5,10 @@
 #define BRANCH_NAME ( "newQue" )
 #define GITLOGS ""\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Tue Apr 7 14:58:31 2015 +0900\n"\
+                "    it can not read buffered data at once\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Mon Apr 6 15:49:34 2015 +0900\n"\
                 "    nothing\n"\
 		"\n"\
@@ -39,10 +43,6 @@
                 "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Tue Mar 10 14:27:17 2015 +0900\n"\
                 "    working\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Mon Mar 9 20:49:27 2015 +0900\n"\
-                "    a problem in disconnect when receive ans from CT shuld be resolved\n"\
 		"\n"\
                 ""
 #endif

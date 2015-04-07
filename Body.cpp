@@ -8,6 +8,8 @@ Body::Body()
   if ( ! ReadConfig() )
     return;
 
+  Chs = Config[ "NUM_OF_CHS" ].toInt();
+  retData.resize( Chs );
   recSeq = 0;
   
   initialized = false;

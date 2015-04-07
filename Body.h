@@ -14,6 +14,7 @@ class Body : public QObject
   QMap<int,QString> ChNum2Name;
   QMap<QString,int> ChName2Num;
 
+  int Chs;
   CT08 *CT;
   Stars *s;
 
@@ -22,6 +23,7 @@ class Body : public QObject
   bool finalized;
   int dataNo;
   int nowDataNo;
+  QVector<QString> retData;
 
   int recSeq;
   
