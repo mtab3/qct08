@@ -71,6 +71,8 @@ signals:
   void AskQInitialize( SMsg msg );
   void AskQGetData( SMsg msg );
   void AskQFinalize( SMsg msg );
+
+  void AskRaw( SMsg msg );
 };
 
 #endif

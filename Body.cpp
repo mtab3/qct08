@@ -13,6 +13,8 @@ Body::Body()
   initialized = false;
   gotData = false;
   finalized = false;
+  dataNo = 0;
+  nowDataNo = 0;
   
   SetUpCT08Connection();
   SetUpStarsConnection();
@@ -61,6 +63,8 @@ void Body::SetUpStarsConnection( void )
   connect( s, SIGNAL( AskQGetData( SMsg ) ), this, SLOT( AnsQGetData( SMsg ) ), Qt::UniqueConnection );
   connect( s, SIGNAL( AskQFinalize( SMsg ) ), this, SLOT( AnsQFinalize( SMsg ) ), Qt::UniqueConnection );
 
+  connect( s, SIGNAL( AskRaw( SMsg ) ), this, SLOT( AnsRaw( SMsg ) ), Qt::UniqueConnection );
+  
   s->SetNewSVAddress( Config["STARS_IP"] );
   s->SetNewSVPort( Config["STARS_PORT"] );
   s->MakeConnection();

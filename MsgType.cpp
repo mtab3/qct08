@@ -19,6 +19,8 @@ const MsgTyp MsgT[] = {
   { "qGetData", QGETDATA },
   { "qFinalize", QFINALIZE }, 
 
+  { "Raw", RAW },
+  
   { "", NOTMSG },
 };
 

@@ -21,6 +21,8 @@ enum MSGTYPE {
   QGETDATA,
   QFINALIZE,
 
+  RAW,
+  
   NOTMSG,
 };
 

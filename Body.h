@@ -20,6 +20,8 @@ class Body : public QObject
   bool initialized;
   bool gotData;
   bool finalized;
+  int dataNo;
+  int nowDataNo;
 
   int recSeq;
   
@@ -50,6 +52,8 @@ private slots:
   void AnsQInitialize( SMsg msg );
   void AnsQGetData( SMsg msg );
   void AnsQFinalize( SMsg msg );
+
+  void AnsRaw( SMsg msg );
 
   void ansGetValue( CTMsg msg, SMsg smsg );
   void ansNowDataNo( CTMsg msg, SMsg smsg );

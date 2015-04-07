@@ -181,6 +181,9 @@ void Stars::ReceiveMessageFromStars( void )
           emit AskQGetData( smsg ); break;
         case QFINALIZE:
           emit AskQFinalize( smsg ); break;
+
+	case RAW:
+	  emit AskRaw( smsg ); break;
 	  
         default:
           SendAns( smsg, "Er: Undefined Command" );

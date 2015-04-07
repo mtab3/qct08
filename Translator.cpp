@@ -91,6 +91,11 @@ void Body::AnsStop( SMsg msg )
   simpleSend( "STOP", msg );
 }
 
+void Body::AnsRaw( SMsg msg )
+{
+  simpleSend( msg.Val(), msg );
+}
+
 void Body::AnsQInitialize( SMsg msg )
 {
   smsg = msg;
@@ -101,7 +106,7 @@ void Body::AnsQInitialize( SMsg msg )
     if ( ! initialized ) {          // 連続で何回も呼ばれても先頭の一回だけ
       CT->SendACmd( "STOP" );       // カウントしてても止める
       CT->SendACmd( "CLGSDN" );     // データ記録番地 0 にセット
-      // CT->SendCMD( "GSED9999" ); // データ記録最終番地(ここまで来ると収集は止まる)
+      CT->SendACmd( "GSED9999" ); // データ記録最終番地(ここまで来ると収集は止まる)
       CT->SendACmd( "GT_ACQ_DIF" ); // カウントの差分を記録
       CT->SendACmd( "GESTRT" );     // ゲートエッジデータ収集モード
                                     // 最初のゲート立ち上がりでカウントクリア
@@ -174,15 +179,24 @@ void Body::ansGetValue( CTMsg msg, SMsg smsg )
   s->SendAns( smsg, QString( "@GetValue %1" ).arg( msg.msg().toInt() ) );
 }
 
-void Body::ansNowDataNo( CTMsg /* msg */, SMsg /* smsg */ )
+void Body::ansNowDataNo( CTMsg msg, SMsg /* smsg */ )
 {
-  qDebug() << "ans now data no";
+  disconnect( CT, SIGNAL( received( CTMsg, SMsg ) ),
+	      this, SLOT( ansNowDataNo( CTMsg, SMsg ) ) );
+  dataNo = msg.msg().toInt();
+  nowDataNo = 0;
+  qDebug() << "ans now data no" << dataNo;
 }
 
-void Body::ansGetData( CTMsg /* msg */, SMsg /* smsg */ )
+void Body::ansGetData( CTMsg msg, SMsg smsg )
 {
-  qDebug() << "ans get data";
-  //  s->SendAns( smsg, QString( "@qGetData %1" ).arg( msg.msg().toInt() ) );
+  nowDataNo++;
+  qDebug() << "ans get data" << nowDataNo << dataNo;
+  if ( nowDataNo >= dataNo ) {
+    disconnect( CT, SIGNAL( received( CTMsg, SMsg ) ),
+		this, SLOT( ansGetData( CTMsg, SMsg ) ) );
+    s->SendAns( smsg, QString( "@qGetData %1" ).arg( nowDataNo ) );
+  }
 }
 
 

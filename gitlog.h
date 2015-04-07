@@ -5,6 +5,10 @@
 #define BRANCH_NAME ( "newQue" )
 #define GITLOGS ""\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Mon Apr 6 15:49:34 2015 +0900\n"\
+                "    nothing\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Fri Apr 3 14:56:09 2015 +0900\n"\
                 "    working\n"\
 		"\n"\
@@ -39,10 +43,6 @@
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Mon Mar 9 20:49:27 2015 +0900\n"\
                 "    a problem in disconnect when receive ans from CT shuld be resolved\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Mon Mar 9 20:28:22 2015 +0900\n"\
-                "    it may work as stndard nct08 driver for XafsM2\n"\
 		"\n"\
                 ""
 #endif
