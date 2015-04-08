@@ -2,8 +2,12 @@
 #define GITLOG_H
 
 
-#define BRANCH_NAME ( "newQue" )
+#define BRANCH_NAME ( "noQue" )
 #define GITLOGS ""\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Tue Apr 7 17:04:58 2015 +0900\n"\
+                "    try no que again from here\n"\
+		"\n"\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Tue Apr 7 14:58:31 2015 +0900\n"\
                 "    it can not read buffered data at once\n"\
@@ -39,10 +43,6 @@
                 "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Tue Mar 10 15:16:16 2015 +0900\n"\
                 "    debugging\n"\
-		"\n"\
-                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Tue Mar 10 14:27:17 2015 +0900\n"\
-                "    working\n"\
 		"\n"\
                 ""
 #endif

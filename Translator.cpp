@@ -2,27 +2,27 @@
 
 void Body::AnsIsBusy( SMsg msg )
 {
-  smsg = msg;
   s->SendAns( msg,
 	      QString( "@%1 %2" ).arg( msg.Msg() ).arg( CT->isBusy() ? 1 : 0 ) );
 }
 
 void Body::changedCTIsBusy( bool busy )
 {
-  qDebug() << Config[ "NAME_ON_STARS" ] << QString( "_ChangedIsBusy %1" ).arg( busy ? 1 : 0 );
-  s->SendEvent( Config[ "NAME_ON_STARS" ], QString( "_ChangedIsBusy %1" ).arg( busy ? 1 : 0 ) );
+  s->SendEvent( Config[ "NAME_ON_STARS" ],
+		QString( "_ChangedIsBusy %1" ).arg( busy ? 1 : 0 ) );
 }
 
-void Body::AnsReset( SMsg msg )
+void Body::AnsReset( SMsg msg )  // QXAFS 
 {
   initialized = false;
   gotData = false;
   finalized = false;
 
-  smsg = msg;
-  CT->SendACmd( "STOP" );
+  //  CT->SendACmd( "REST" );
+  //  CT->SendACmd( "STOP" );
   CT->SendACmd( "CLAL" );
-  CT->SendACmd( "GATEIN_EN" );   // default でこれになってるはず。念の為
+  //  CT->SendACmd( "ENTS" );
+  //  CT->SendACmd( "GATEIN_EN" );   // default でこれになってるはず。念の為
 
   s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   // 返答を待たず Ok:
@@ -30,23 +30,18 @@ void Body::AnsReset( SMsg msg )
 
 void Body::AnsGetValue( SMsg msg )
 {
-  smsg = msg;
   if ( ( msg.ToCh() == "" ) || ( ! ChName2Num.contains( msg.ToCh() ) ) ){
     s->SendAns( msg, "@GetValue Er:" );
   } else {
     int ch = ChName2Num[ msg.ToCh() ];
     QString cmd = QString( "CTR?%1" ).arg( ch, 2, 10, QChar( '0' ) );
-    CT->QueCmd( cmd, 0, msg,
-		CT, SIGNAL( received( CTMsg, SMsg ) ),
-		this, SLOT( ansGetValue( CTMsg, SMsg ) ) );
-    recSeq = 0;
-    CT->SendCmd();
+    QString ans = CT->SendAndRead( cmd, 10 );
+    s->SendAns( msg, QString( "@GetValue %1" ).arg( ans.toInt() ) );
   }
 }
 
 void Body::simpleSend( QString cmd, SMsg msg )
 {
-  smsg = msg;
   CT->SendACmd( cmd );
   s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   // 返答を待たず Ok:
@@ -65,6 +60,10 @@ void Body::AnsCounterReset( SMsg msg )
 
 void Body::AnsCountStart( SMsg msg )
 {
+  CT->SendACmd( "STOP" );
+  CT->SendACmd( "ENTS" );
+  CT->SendACmd( "CLAL" );
+  CT->SendACmd( "GATEIN_DS" );
   CT->SendACmd( "STRT" );
   s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
 }
@@ -96,9 +95,16 @@ void Body::AnsRaw( SMsg msg )
   simpleSend( msg.Val(), msg );
 }
 
+void Body::AnsRawRead( SMsg msg )
+{
+  if ( msg.Vals().count() > 1 ) {
+    qDebug() << CT->SendAndRead( msg.Vals()[0], msg.Vals()[1].toInt() );
+  }
+  s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
+}
+
 void Body::AnsQInitialize( SMsg msg )
 {
-  smsg = msg;
   if ( msg.ToCh() == "" ) {
     s->SendAns( msg, QString( "@%1 Er:" ).arg( msg.Msg() ) );
   } else {
@@ -107,6 +113,8 @@ void Body::AnsQInitialize( SMsg msg )
       CT->SendACmd( "STOP" );       // カウントしてても止める
       CT->SendACmd( "CLGSDN" );     // データ記録番地 0 にセット
       CT->SendACmd( "GSED9999" ); // データ記録最終番地(ここまで来ると収集は止まる)
+      //      CT->sendACmd( "DSAS" );
+      CT->SendACmd( "GATEIN_EN" );
       CT->SendACmd( "GT_ACQ_DIF" ); // カウントの差分を記録
       CT->SendACmd( "GESTRT" );     // ゲートエッジデータ収集モード
                                     // 最初のゲート立ち上がりでカウントクリア
@@ -124,93 +132,68 @@ void Body::AnsQInitialize( SMsg msg )
 
 void Body::AnsQGetData( SMsg msg )
 {
-  qDebug() << "qGetData";
   if ( ( msg.ToCh() == "" ) || ( ! ChName2Num.contains( msg.ToCh() ) ) ){
     s->SendAns( msg, QString( "@%1 Er:" ).arg( msg.Msg() ) );
-    qDebug() << "b";
   } else {
     int ch = ChName2Num[ msg.ToCh() ];
-    qDebug() << "c" << ch;
-
-    if ( ! gotData ) {         // 連続で何回も呼ばれても先頭の一回だけ
-      CT->SendACmd( "STOP" );   // とにかく停止
-#if 0
-      CT->QueCmd( "GSDN?", 0, msg, // 現在データ番号の読み取り
-		  CT, SIGNAL( received( CTMsg, SMsg ) ),
-		  this, SLOT( ansNowDataNo( CTMsg, SMsg ) ) );
-#endif
-      dataNo = CT->SendAndRead( "GSDN?", 4 ).toInt();
-      qDebug() << "res gsdn " << dataNo;
-      retData[ch].clear();
-      CT->QueCmd( "GSDAL?", dataNo, msg, // 現在データ番号までのデータ読み取り
-		  CT, SIGNAL( received( CTMsg, SMsg ) ),
-		  this, SLOT( ansGetData( CTMsg, SMsg ) ) );
-
-      initialized = false;
-      gotData = true;
-      finalized = false;
-
-      CT->SendCmd();
+    qDebug() << "1";
+    CT->SendACmd( "STOP" );   // とにかく停止
+    qDebug() << "2";
+    int dataNo = CT->SendAndRead( "GSDN?", 4 ).toInt();
+    qDebug() << "3";
+    qDebug() << "Data No " << dataNo;
+    if ( dataNo <= 0 ) {
+      s->SendAns( msg, QString( "@qGetData 0" ) );
+      return;
     }
+    
+    QStringList ans;
+    CT->QGetData( ans );
+
+    QString ret;
+    QStringList vals;
+    if ( ans.count() > 1 ) {
+      vals = ans[1].simplified().split( QRegExp( "[\\s,]+" ) );
+      ret += " " + QString::number( vals[ch].toInt() );
+    }
+    for ( int i = 1; i < ans.count(); i++ ) {
+      qDebug() << "line " << i << " : " << ans[i];
+      vals = ans[i].simplified().split( QRegExp( "[\\s,]+" ) );
+      ret += " " + QString::number( vals[ch].toInt() );
+    }
+    s->SendAns( msg, QString( "@qGetData %1 %2" ).arg( ans.count() ).arg( ret ) );
+    
+    initialized = false;
+    gotData = true;
+    finalized = false;
+    // }
     //    s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   }
 }
-
+ 
 void Body::AnsQFinalize( SMsg msg )
 {
+#if 0
   if ( msg.ToCh() != "" ) {
     s->SendAns( msg, QString( "@%1 Er:" ).arg( msg.Msg() ) );
   } else {
+#endif
     //    int ch = ChName2Num[ msg.ToCh() ];
-
+    
     if ( ! finalized ) {        // 連続で何回も呼ばれても先頭の一回だけ
       CT->SendACmd( "STOP" );    // とにかく止めておく
+
+      CT->SendACmd( "ENTS" );
+      CT->SendACmd( "GATEIN_DS" );
       
       initialized = false;
       gotData = false;
       finalized = true;
     }
     s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
+#if 0
   }
+#endif
 }
-
-void Body::ansGetValue( CTMsg msg, SMsg smsg )
-{
-  qDebug() << "ctmsg " << msg.msg();
-  // recSeq に従って動作をすすめる (GetValue は 1step)
-  disconnect( CT, SIGNAL( received( CTMsg, SMsg ) ),
-	      this, SLOT( ansGetValue( CTMsg, SMsg ) ) );
-  s->SendAns( smsg, QString( "@GetValue %1" ).arg( msg.msg().toInt() ) );
-}
-
-void Body::ansNowDataNo( CTMsg msg, SMsg /* smsg */ )
-{
-  disconnect( CT, SIGNAL( received( CTMsg, SMsg ) ),
-	      this, SLOT( ansNowDataNo( CTMsg, SMsg ) ) );
-  dataNo = msg.msg().toInt();
-  nowDataNo = 0;
-  retData.clear();
-  qDebug() << "ans now data no" << dataNo;
-}
-
-void Body::ansGetData( CTMsg msg, SMsg smsg )
-{
-  nowDataNo++;
-  int ch = ChName2Num[ smsg.ToCh() ];
-  QString val = QString::number( msg.msg().simplified().split( QRegExp( "[\\s,]+" ) )[ ch ].toInt() );
-  retData[ch] += " " + val;
- 
-  if ( nowDataNo >= dataNo ) {
-    qDebug() << "sending" << ch;
-    disconnect( CT, SIGNAL( received( CTMsg, SMsg ) ),
-		this, SLOT( ansGetData( CTMsg, SMsg ) ) );
-    s->SendAns( smsg, QString( "@qGetData %1 %2" ).arg( nowDataNo ).arg( retData[ch] ) );
-    CT->Block( false );
-    CT->SendCmd();
-  }
-}
-
-
-
 
 

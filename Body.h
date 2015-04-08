@@ -21,14 +21,8 @@ class Body : public QObject
   bool initialized;
   bool gotData;
   bool finalized;
-  int dataNo;
-  int nowDataNo;
-  QVector<QString> retData;
-
-  int recSeq;
+  QStringList retDatas;
   
-  SMsg smsg;
-
   void simpleSend( QString cmd, SMsg msg );
   bool ReadConfig( void );
   void SetUp( void );
@@ -56,10 +50,9 @@ private slots:
   void AnsQFinalize( SMsg msg );
 
   void AnsRaw( SMsg msg );
+  void AnsRawRead( SMsg msg );
 
-  void ansGetValue( CTMsg msg, SMsg smsg );
-  void ansNowDataNo( CTMsg msg, SMsg smsg );
-  void ansGetData( CTMsg msg, SMsg smsg );
+  //  void ansGetData( CTMsg msg, SMsg smsg );
 
   void changedCTIsBusy( bool busy );
 signals:

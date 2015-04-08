@@ -20,6 +20,7 @@ const MsgTyp MsgT[] = {
   { "qFinalize", QFINALIZE }, 
 
   { "Raw", RAW },
+  { "RawRead", RAWREAD },
   
   { "", NOTMSG },
 };

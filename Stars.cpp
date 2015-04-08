@@ -184,6 +184,8 @@ void Stars::ReceiveMessageFromStars( void )
 
 	case RAW:
 	  emit AskRaw( smsg ); break;
+	case RAWREAD:
+	  emit AskRawRead( smsg ); break;
 	  
         default:
           SendAns( smsg, "Er: Undefined Command" );

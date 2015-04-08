@@ -9,14 +9,10 @@ Body::Body()
     return;
 
   Chs = Config[ "NUM_OF_CHS" ].toInt();
-  retData.resize( Chs );
-  recSeq = 0;
   
   initialized = false;
   gotData = false;
   finalized = false;
-  dataNo = 0;
-  nowDataNo = 0;
   
   SetUpCT08Connection();
   SetUpStarsConnection();
@@ -66,6 +62,7 @@ void Body::SetUpStarsConnection( void )
   connect( s, SIGNAL( AskQFinalize( SMsg ) ), this, SLOT( AnsQFinalize( SMsg ) ), Qt::UniqueConnection );
 
   connect( s, SIGNAL( AskRaw( SMsg ) ), this, SLOT( AnsRaw( SMsg ) ), Qt::UniqueConnection );
+  connect( s, SIGNAL( AskRawRead( SMsg ) ), this, SLOT( AnsRawRead( SMsg ) ), Qt::UniqueConnection );
   
   s->SetNewSVAddress( Config["STARS_IP"] );
   s->SetNewSVPort( Config["STARS_PORT"] );

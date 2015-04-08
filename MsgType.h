@@ -22,6 +22,7 @@ enum MSGTYPE {
   QFINALIZE,
 
   RAW,
+  RAWREAD,
   
   NOTMSG,
 };

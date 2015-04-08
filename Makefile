@@ -50,7 +50,6 @@ OBJECTS_DIR   = ./
 
 SOURCES       = Body.cpp \
 		ct08.cpp \
-		ct08Msg.cpp \
 		main.cpp \
 		MsgType.cpp \
 		ReadConfig.cpp \
@@ -62,7 +61,6 @@ SOURCES       = Body.cpp \
 		moc_Stars.cpp
 OBJECTS       = Body.o \
 		ct08.o \
-		ct08Msg.o \
 		main.o \
 		MsgType.o \
 		ReadConfig.o \
@@ -177,14 +175,12 @@ DIST          = ../../../../local/lib/qt5/mkspecs/features/spec_pre.prf \
 		../../../../local/lib/qt5/mkspecs/features/lex.prf \
 		qct08.pro Body.h \
 		ct08.h \
-		ct08Msg.h \
 		gitlog.h \
 		main.h \
 		MsgType.h \
 		SMsg.h \
 		Stars.h Body.cpp \
 		ct08.cpp \
-		ct08Msg.cpp \
 		main.cpp \
 		MsgType.cpp \
 		ReadConfig.cpp \
@@ -451,8 +447,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents qct08.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents Body.h ct08.h ct08Msg.h gitlog.h main.h MsgType.h SMsg.h Stars.h $(DISTDIR)/
-	$(COPY_FILE) --parents Body.cpp ct08.cpp ct08Msg.cpp main.cpp MsgType.cpp ReadConfig.cpp SMsg.cpp Stars.cpp Translator.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Body.h ct08.h gitlog.h main.h MsgType.h SMsg.h Stars.h $(DISTDIR)/
+	$(COPY_FILE) --parents Body.cpp ct08.cpp main.cpp MsgType.cpp ReadConfig.cpp SMsg.cpp Stars.cpp Translator.cpp $(DISTDIR)/
 
 
 clean:compiler_clean 
@@ -730,7 +726,6 @@ moc_Body.cpp: ../../../../local/include/qt5/QtCore/QObject \
 		../../../../local/include/qt5/QtCore/QTimer \
 		MsgType.h \
 		SMsg.h \
-		ct08Msg.h \
 		Stars.h \
 		../../../../local/include/qt5/QtNetwork/QTcpSocket \
 		Body.h
@@ -982,7 +977,6 @@ moc_ct08.cpp: ../../../../local/include/qt5/QtCore/QtCore \
 		../../../../local/include/qt5/QtCore/QTimer \
 		MsgType.h \
 		SMsg.h \
-		ct08Msg.h \
 		ct08.h
 	/usr/local/lib/qt5/bin/moc $(DEFINES) -I/usr/local/lib/qt5/mkspecs/freebsd-clang -I/usr/home/tabuchi/prog/qct08 -I/usr/home/tabuchi/prog/qct08 -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtNetwork -I/usr/local/include/qt5/QtCore -I/usr/local/include -I/usr/include/c++/v1 -I/usr/include/clang/3.4.1 -I/usr/include ct08.h -o moc_ct08.cpp
 
@@ -1334,7 +1328,6 @@ Body.o: Body.cpp ../../../../local/include/qt5/QtCore/QTimer \
 		../../../../local/include/qt5/QtNetwork/qtnetworkversion.h \
 		MsgType.h \
 		SMsg.h \
-		ct08Msg.h \
 		Stars.h \
 		../../../../local/include/qt5/QtNetwork/QTcpSocket
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Body.o Body.cpp
@@ -1585,81 +1578,8 @@ ct08.o: ct08.cpp ct08.h \
 		../../../../local/include/qt5/QtNetwork/qtnetworkversion.h \
 		../../../../local/include/qt5/QtCore/QTimer \
 		MsgType.h \
-		SMsg.h \
-		ct08Msg.h
+		SMsg.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ct08.o ct08.cpp
-
-ct08Msg.o: ct08Msg.cpp ct08Msg.h \
-		../../../../local/include/qt5/QtCore/QString \
-		../../../../local/include/qt5/QtCore/qstring.h \
-		../../../../local/include/qt5/QtCore/qchar.h \
-		../../../../local/include/qt5/QtCore/qglobal.h \
-		../../../../local/include/qt5/QtCore/qconfig.h \
-		../../../../local/include/qt5/QtCore/qconfig-modules.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-network.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-multimedia.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-quick.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-core.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-concurrent.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-dbus.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-gui.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-widgets.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-printsupport.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-opengl.h \
-		../../../../local/include/qt5/QtCore/modules/qconfig-webkit.h \
-		../../../../local/include/qt5/QtCore/qfeatures.h \
-		../../../../local/include/qt5/QtCore/qsystemdetection.h \
-		../../../../local/include/qt5/QtCore/qprocessordetection.h \
-		../../../../local/include/qt5/QtCore/qcompilerdetection.h \
-		../../../../local/include/qt5/QtCore/qtypeinfo.h \
-		../../../../local/include/qt5/QtCore/qtypetraits.h \
-		../../../../local/include/qt5/QtCore/qsysinfo.h \
-		../../../../local/include/qt5/QtCore/qlogging.h \
-		../../../../local/include/qt5/QtCore/qflags.h \
-		../../../../local/include/qt5/QtCore/qatomic.h \
-		../../../../local/include/qt5/QtCore/qbasicatomic.h \
-		../../../../local/include/qt5/QtCore/qatomic_bootstrap.h \
-		../../../../local/include/qt5/QtCore/qgenericatomic.h \
-		../../../../local/include/qt5/QtCore/qatomic_msvc.h \
-		../../../../local/include/qt5/QtCore/qatomic_armv7.h \
-		../../../../local/include/qt5/QtCore/qatomic_armv6.h \
-		../../../../local/include/qt5/QtCore/qatomic_armv5.h \
-		../../../../local/include/qt5/QtCore/qatomic_ia64.h \
-		../../../../local/include/qt5/QtCore/qatomic_mips.h \
-		../../../../local/include/qt5/QtCore/qatomic_x86.h \
-		../../../../local/include/qt5/QtCore/qatomic_cxx11.h \
-		../../../../local/include/qt5/QtCore/qatomic_gcc.h \
-		../../../../local/include/qt5/QtCore/qatomic_unix.h \
-		../../../../local/include/qt5/QtCore/qglobalstatic.h \
-		../../../../local/include/qt5/QtCore/qmutex.h \
-		../../../../local/include/qt5/QtCore/qnumeric.h \
-		../../../../local/include/qt5/QtCore/qbytearray.h \
-		../../../../local/include/qt5/QtCore/qrefcount.h \
-		../../../../local/include/qt5/QtCore/qnamespace.h \
-		../../../../local/include/qt5/QtCore/qarraydata.h \
-		../../../../local/include/qt5/QtCore/qstringbuilder.h \
-		../../../../local/include/qt5/QtCore/QStringList \
-		../../../../local/include/qt5/QtCore/qstringlist.h \
-		../../../../local/include/qt5/QtCore/qalgorithms.h \
-		../../../../local/include/qt5/QtCore/qdatastream.h \
-		../../../../local/include/qt5/QtCore/qscopedpointer.h \
-		../../../../local/include/qt5/QtCore/qiodevice.h \
-		../../../../local/include/qt5/QtCore/qobject.h \
-		../../../../local/include/qt5/QtCore/qobjectdefs.h \
-		../../../../local/include/qt5/QtCore/qobjectdefs_impl.h \
-		../../../../local/include/qt5/QtCore/qlist.h \
-		../../../../local/include/qt5/QtCore/qiterator.h \
-		../../../../local/include/qt5/QtCore/qbytearraylist.h \
-		../../../../local/include/qt5/QtCore/qcoreevent.h \
-		../../../../local/include/qt5/QtCore/qmetatype.h \
-		../../../../local/include/qt5/QtCore/qvarlengtharray.h \
-		../../../../local/include/qt5/QtCore/qcontainerfwd.h \
-		../../../../local/include/qt5/QtCore/qisenum.h \
-		../../../../local/include/qt5/QtCore/qobject_impl.h \
-		../../../../local/include/qt5/QtCore/qpair.h \
-		../../../../local/include/qt5/QtCore/qregexp.h \
-		../../../../local/include/qt5/QtCore/qstringmatcher.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ct08Msg.o ct08Msg.cpp
 
 main.o: main.cpp ../../../../local/include/qt5/QtCore/QCoreApplication \
 		../../../../local/include/qt5/QtCore/qcoreapplication.h \
@@ -1911,7 +1831,6 @@ main.o: main.cpp ../../../../local/include/qt5/QtCore/QCoreApplication \
 		../../../../local/include/qt5/QtCore/QTimer \
 		MsgType.h \
 		SMsg.h \
-		ct08Msg.h \
 		Stars.h \
 		../../../../local/include/qt5/QtNetwork/QTcpSocket
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
@@ -2215,7 +2134,6 @@ ReadConfig.o: ReadConfig.cpp Body.h \
 		../../../../local/include/qt5/QtCore/QTimer \
 		MsgType.h \
 		SMsg.h \
-		ct08Msg.h \
 		Stars.h \
 		../../../../local/include/qt5/QtNetwork/QTcpSocket
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ReadConfig.o ReadConfig.cpp
@@ -2635,7 +2553,6 @@ Translator.o: Translator.cpp Body.h \
 		../../../../local/include/qt5/QtCore/QTimer \
 		MsgType.h \
 		SMsg.h \
-		ct08Msg.h \
 		Stars.h \
 		../../../../local/include/qt5/QtNetwork/QTcpSocket
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Translator.o Translator.cpp

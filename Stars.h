@@ -73,6 +73,7 @@ signals:
   void AskQFinalize( SMsg msg );
 
   void AskRaw( SMsg msg );
+  void AskRawRead( SMsg msg );
 };
 
 #endif
