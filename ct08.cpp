@@ -42,7 +42,6 @@ void CT08::Connect( QString ip, QString port )
 
 void CT08::SendACmd( QString cmd )
 {
-  qDebug() << "in Send a cmd " << cmd;
   QByteArray Cmd = cmd.toLatin1() + "\x0d\x0a\0";
   ss->write( Cmd.data() );
 
@@ -51,12 +50,10 @@ void CT08::SendACmd( QString cmd )
     emit changedIsBusy( busy );
     t->start();
   }
-  qDebug() << "out Send a cmd ";
 }
 
 QString CT08::SendAndRead( QString cmd, int size )
 {
-  qDebug() << "in Send and read" << cmd;
   SendACmd( cmd );
   ss->waitForReadyRead();
   while( ss->bytesAvailable() < size ) { ss->waitForReadyRead(); };
@@ -64,20 +61,24 @@ QString CT08::SendAndRead( QString cmd, int size )
   rbuf.resize( ss->bytesAvailable() );
   ss->read( rbuf.data(), ss->bytesAvailable() );
 
-  qDebug() << "out Send and read";
   return QString( rbuf.data() );
 }
 
-void CT08::QGetData( QStringList &data )
+void CT08::QGetData( int ch, int num, QStringList &data )
 {
-  qDebug() << "in qGetData";
   data.clear();
   bool Reading = true;
-   SendACmd( "GSDAL?" );
+  QString cmd = QString( "GSCRDX?%1%2%3%4%5" )
+    .arg( ch,     2, 10, QChar( '0' ) )
+    .arg( ch,     2, 10, QChar( '0' ) )
+    .arg( (int)0, 2, 10, QChar( '0' ) )
+    .arg( (int)0, 4, 10, QChar( '0' ) )
+    .arg( num,    4, 10, QChar( '0' ) );
+  SendACmd( cmd );
   ss->waitForReadyRead();
-   while ( Reading ) {
+  while ( Reading ) {
     while ( ! ss->atEnd() ) {
-       QString rbuf = ss->readLine();
+      QString rbuf = ss->readLine();
       if ( rbuf.mid( 0, 3 ) == "EOF" ) {
 	Reading = false;
 	break;
@@ -88,12 +89,10 @@ void CT08::QGetData( QStringList &data )
       ss->waitForReadyRead();
     }
   }
-  qDebug() << "out qGetData";
 }
 
 void CT08::watch( void )
 {
-  qDebug() << "in watch";
   QString RBuf = SendAndRead( "FLG?2", 2 );
   if ( RBuf.mid( 8, 2 ).toInt( 0, 16 ) & 0x20 ) {
     if ( ! busy ) {
@@ -107,7 +106,6 @@ void CT08::watch( void )
       t->stop();
     }
   }
-  qDebug() << "out watch";
 }
 
 

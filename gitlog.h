@@ -4,6 +4,10 @@
 
 #define BRANCH_NAME ( "master" )
 #define GITLOGS ""\
+                "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Fri Apr 24 19:15:20 2015 +0900\n"\
+                "    debugging\n"\
+		"\n"\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Thu Apr 9 20:25:22 2015 +0900\n"\
                 "    clean up\n"\
@@ -39,10 +43,6 @@
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Thu Apr 2 21:20:21 2015 +0900\n"\
                 "    working on QXAFS mode\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu Apr 2 20:31:19 2015 +0900\n"\
-                "    merged with master\n"\
 		"\n"\
                 ""
 #endif

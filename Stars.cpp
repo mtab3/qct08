@@ -214,7 +214,6 @@ void Stars::ReceiveMessageFromStars( void )
 
 void Stars::SendAns( SMsg msg, QString ans )
 {
-  qDebug() << "Ans " << ans;
   QString aLine = msg.To() + ">" + msg.From() + " " + ans + "\n";
   ss->write( aLine.toLatin1() );
 }
