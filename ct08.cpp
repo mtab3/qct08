@@ -42,6 +42,7 @@ void CT08::Connect( QString ip, QString port )
 
 void CT08::SendACmd( QString cmd )
 {
+  qDebug() << "in Send a cmd " << cmd;
   QByteArray Cmd = cmd.toLatin1() + "\x0d\x0a\0";
   ss->write( Cmd.data() );
 
@@ -50,22 +51,26 @@ void CT08::SendACmd( QString cmd )
     emit changedIsBusy( busy );
     t->start();
   }
+  qDebug() << "out Send a cmd ";
 }
 
 QString CT08::SendAndRead( QString cmd, int size )
 {
+  qDebug() << "in Send and read" << cmd;
   SendACmd( cmd );
   ss->waitForReadyRead();
   while( ss->bytesAvailable() < size ) { ss->waitForReadyRead(); };
   QByteArray rbuf;
   rbuf.resize( ss->bytesAvailable() );
   ss->read( rbuf.data(), ss->bytesAvailable() );
-  
+
+  qDebug() << "out Send and read";
   return QString( rbuf.data() );
 }
 
 void CT08::QGetData( QStringList &data )
 {
+  qDebug() << "in qGetData";
   data.clear();
   bool Reading = true;
    SendACmd( "GSDAL?" );
@@ -83,10 +88,12 @@ void CT08::QGetData( QStringList &data )
       ss->waitForReadyRead();
     }
   }
+  qDebug() << "out qGetData";
 }
 
 void CT08::watch( void )
 {
+  qDebug() << "in watch";
   QString RBuf = SendAndRead( "FLG?2", 2 );
   if ( RBuf.mid( 8, 2 ).toInt( 0, 16 ) & 0x20 ) {
     if ( ! busy ) {
@@ -100,6 +107,7 @@ void CT08::watch( void )
       t->stop();
     }
   }
+  qDebug() << "out watch";
 }
 
 

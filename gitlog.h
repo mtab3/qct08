@@ -5,6 +5,14 @@
 #define BRANCH_NAME ( "master" )
 #define GITLOGS ""\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu Apr 9 20:25:22 2015 +0900\n"\
+                "    clean up\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu Apr 9 20:24:44 2015 +0900\n"\
+                "    checked with XafsM2\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Wed Apr 8 16:07:46 2015 +0900\n"\
                 "    it looks it works well\n"\
 		"\n"\
@@ -35,14 +43,6 @@
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Thu Apr 2 20:31:19 2015 +0900\n"\
                 "    merged with master\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu Apr 2 20:27:15 2015 +0900\n"\
-                "    monitor can be conducted with this version\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu Apr 2 20:25:49 2015 +0900\n"\
-                "    monitor can be conducted with this version\n"\
 		"\n"\
                 ""
 #endif
