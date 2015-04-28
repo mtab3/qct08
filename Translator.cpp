@@ -149,10 +149,12 @@ void Body::AnsQGetData( SMsg msg )
     QString ret;
     bool ok;
     if ( ans.count() > 1 ) {
-      ret += " " + QString::number( ans[1].toInt( &ok, 16 ) );
+      //      ret += " " + QString::number( ans[1].toInt( &ok, 16 ) );
+      ret += " " + QString::number( ans[1].toInt() );
     }
     for ( int i = 1; i < ans.count(); i++ ) {
-      ret += " " + QString::number( ans[i].toInt( &ok, 16 ) );
+      //      ret += " " + QString::number( ans[i].toInt( &ok, 16 ) );
+      ret += " " + QString::number( ans[i].toInt() );
     }
     s->SendAns( msg, QString( "@qGetData %1 %2" ).arg( ans.count() ).arg( ret ) );
     

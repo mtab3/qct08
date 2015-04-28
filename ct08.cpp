@@ -89,6 +89,12 @@ void CT08::QGetData( int ch, int num, QStringList &data )
       ss->waitForReadyRead();
     }
   }
+#if 0
+  qDebug() << "reading " << ch;
+  for ( int i = 0 ; i < data.count(); i++ ) {
+    qDebug() << i << ": " << data[i].simplified();
+  }
+#endif
 }
 
 void CT08::watch( void )
