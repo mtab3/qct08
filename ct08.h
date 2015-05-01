@@ -40,7 +40,7 @@ public:
   void SendCmd( void );
   void SendACmd( QString cmd );
   QString SendAndRead( QString cmd, int size );
-  void QGetData( int ch, int num, QStringList &data );
+  void QGetData( int ch, int num, QVector<double> &data );
 		      
 public slots:
   void watch( void );

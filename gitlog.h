@@ -5,6 +5,10 @@
 #define BRANCH_NAME ( "master" )
 #define GITLOGS ""\
                 "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Tue Apr 28 15:12:09 2015 +0900\n"\
+                "    a bug of qGetData in ct08.cpp was solved\n"\
+		"\n"\
+                "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Fri Apr 24 20:49:48 2015 +0900\n"\
                 "    GSCRDX is used for qGetData\n"\
 		"\n"\
@@ -39,10 +43,6 @@
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Fri Apr 3 14:56:09 2015 +0900\n"\
                 "    working\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Fri Apr 3 11:27:39 2015 +0900\n"\
-                "    new cfg\n"\
 		"\n"\
                 ""
 #endif

@@ -64,18 +64,20 @@ QString CT08::SendAndRead( QString cmd, int size )
   return QString( rbuf.data() );
 }
 
-void CT08::QGetData( int ch, int num, QStringList &data )
+void CT08::QGetData( int ch, int num, QVector<double> &data )
 {
   data.clear();
   bool Reading = true;
   QString cmd = QString( "GSCRDX?%1%2%3%4%5" )
-    .arg( ch,     2, 10, QChar( '0' ) )
-    .arg( ch,     2, 10, QChar( '0' ) )
-    .arg( (int)0, 2, 10, QChar( '0' ) )
-    .arg( (int)0, 4, 10, QChar( '0' ) )
-    .arg( num,    4, 10, QChar( '0' ) );
+    .arg( ch,     2, 10, QChar( '0' ) )     // 指定チャンネル (ch) から
+    .arg( ch,     2, 10, QChar( '0' ) )     // 指定チャンネル (ch) までの、要は ch だけの
+    .arg( (int)1, 2, 10, QChar( '0' ) )     // タイマーも読み出して(0:w/o, 1:w timer)
+    .arg( (int)0, 4, 10, QChar( '0' ) )     // 0 番目から
+    .arg( num,    4, 10, QChar( '0' ) );    // num 番目までのデータを読みだす
   SendACmd( cmd );
   ss->waitForReadyRead();
+  double time0 = 0;
+  double time = 0;
   while ( Reading ) {
     while ( ! ss->atEnd() ) {
       QString rbuf = ss->readLine();
@@ -83,7 +85,14 @@ void CT08::QGetData( int ch, int num, QStringList &data )
 	Reading = false;
 	break;
       }
-      data << QString( rbuf );
+      QStringList vals = QString( rbuf ).simplified().remove( ',' ).split( ' ' );
+      if ( vals.count() == 1 ) {      // Timer を読まないパタン。いまは使わない
+	data << vals[0].toDouble();
+      } else if ( vals.count() == 2 ) {
+	time = vals[1].toDouble() / 1e6;
+	data << vals[0].toDouble() / ( time - time0 );
+	time0 = time;
+      }
     }
     if ( Reading ) {
       ss->waitForReadyRead();

@@ -130,6 +130,8 @@ void Body::AnsQInitialize( SMsg msg )
 
 // Gate の Hの時間とLの時間の合計は最低 1ms 必要 !!
 
+// AnsGetData が返すのは Count ではなく cps (count per sec)
+// ct08.cpp の側で、時間で割り算した値を返すようになっている
 void Body::AnsQGetData( SMsg msg )
 {
   if ( ( msg.ToCh() == "" ) || ( ! ChName2Num.contains( msg.ToCh() ) ) ){
@@ -143,20 +145,20 @@ void Body::AnsQGetData( SMsg msg )
       return;
     }
     
-    QStringList ans;
+    QVector<double> ans;
     CT->QGetData( ch, dataNo, ans );
 
     QString ret;
     bool ok;
     if ( ans.count() > 1 ) {
       //      ret += " " + QString::number( ans[1].toInt( &ok, 16 ) );
-      ret += " " + QString::number( ans[1].toInt() );
+      ret += " " + QString::number( ans[1] );
     }
-    for ( int i = 1; i < ans.count(); i++ ) {
+    for ( int i = 1; i < ans.count() - 1; i++ ) {
       //      ret += " " + QString::number( ans[i].toInt( &ok, 16 ) );
-      ret += " " + QString::number( ans[i].toInt() );
+      ret += " " + QString::number( ans[i] );
     }
-    s->SendAns( msg, QString( "@qGetData %1 %2" ).arg( ans.count() ).arg( ret ) );
+    s->SendAns( msg, QString( "@qGetData %1 %2" ).arg( ans.count() - 1 ).arg( ret ) );
     
     initialized = false;
     gotData = true;
