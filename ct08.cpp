@@ -35,6 +35,7 @@ void CT08::Connect( QString ip, QString port )
 
     SendACmd( "STOP" );
     SendACmd( "CLAL" );
+    SendACmd( "ENTS" );
     SendACmd( "CLGSDN" );     // データ記録番地 0 にセット
     SendACmd( "GATEIN_DS" );
   }

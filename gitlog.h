@@ -5,6 +5,10 @@
 #define BRANCH_NAME ( "master" )
 #define GITLOGS ""\
                 "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Fri May 1 20:04:28 2015 +0900\n"\
+                "    now qGetData returns values in unit of cps not count\n"\
+		"\n"\
+                "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Tue Apr 28 15:12:09 2015 +0900\n"\
                 "    a bug of qGetData in ct08.cpp was solved\n"\
 		"\n"\
@@ -39,10 +43,6 @@
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Mon Apr 6 15:49:34 2015 +0900\n"\
                 "    nothing\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Fri Apr 3 14:56:09 2015 +0900\n"\
-                "    working\n"\
 		"\n"\
                 ""
 #endif
