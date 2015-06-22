@@ -69,7 +69,8 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
 {
   data.clear();
   bool Reading = true;
-  QString cmd = QString( "GSCRDX?%1%2%3%4%5" )
+  //  QString cmd = QString( "GSCRDX?%1%2%3%4%5" )
+  QString cmd = QString( "GSCRDXH?%1%2%3%4%5" )
     .arg( ch,     2, 10, QChar( '0' ) )     // 指定チャンネル (ch) から
     .arg( ch,     2, 10, QChar( '0' ) )     // 指定チャンネル (ch) までの、要は ch だけの
     .arg( (int)1, 2, 10, QChar( '0' ) )     // タイマーも読み出して(0:w/o, 1:w timer)
@@ -86,12 +87,14 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
 	Reading = false;
 	break;
       }
-      QStringList vals = QString( rbuf ).simplified().remove( ',' ).split( ' ' );
+      //      QStringList vals = QString( rbuf ).simplified().remove( ',' ).split( ' ' );
+      QStringList vals = QString( rbuf ).simplified().remove( ' ' ).split( ',' );
+      qDebug() << "vals : " << QString( rbuf ) << ":::" << vals;
       if ( vals.count() == 1 ) {      // Timer を読まないパタン。いまは使わない
-	data << vals[0].toDouble();
+	data << vals[0].toInt( NULL, 16 );
       } else if ( vals.count() == 2 ) {
-	time = vals[1].toDouble() / 1e6;
-	data << vals[0].toDouble() / ( time - time0 );
+	time = (double)vals[1].toInt( NULL, 16 ) / 1e6;
+	data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
 	time0 = time;
       }
     }

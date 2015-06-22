@@ -13,7 +13,9 @@ Body::Body()
   initialized = false;
   gotData = false;
   finalized = false;
-  
+
+  StopModeCMD = "ENTS";
+
   SetUpCT08Connection();
   SetUpStarsConnection();
 }

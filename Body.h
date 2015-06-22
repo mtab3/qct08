@@ -18,6 +18,8 @@ class Body : public QObject
   CT08 *CT;
   Stars *s;
 
+  QString StopModeCMD;
+
   bool initialized;
   bool gotData;
   bool finalized;

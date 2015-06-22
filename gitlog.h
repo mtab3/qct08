@@ -5,6 +5,18 @@
 #define BRANCH_NAME ( "master" )
 #define GITLOGS ""\
                 "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu May 21 19:57:28 2015 +0900\n"\
+                "    Merge branch 'master' of ssh://titan/git/Qt0/qct08\n"\
+		"\n"\
+                "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu May 21 19:56:57 2015 +0900\n"\
+                "    the problem for the continuous scan was solved\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Thu May 21 12:39:54 2015 +0900\n"\
+                "    nothing\n"\
+		"\n"\
+                "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Fri May 1 20:04:28 2015 +0900\n"\
                 "    now qGetData returns values in unit of cps not count\n"\
 		"\n"\
@@ -31,18 +43,6 @@
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Wed Apr 8 16:07:46 2015 +0900\n"\
                 "    it looks it works well\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Tue Apr 7 17:04:58 2015 +0900\n"\
-                "    try no que again from here\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Tue Apr 7 14:58:31 2015 +0900\n"\
-                "    it can not read buffered data at once\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Mon Apr 6 15:49:34 2015 +0900\n"\
-                "    nothing\n"\
 		"\n"\
                 ""
 #endif

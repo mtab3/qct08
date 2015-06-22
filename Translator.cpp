@@ -21,7 +21,7 @@ void Body::AnsReset( SMsg msg )  // QXAFS
   //  CT->SendACmd( "REST" );
   //  CT->SendACmd( "STOP" );
   CT->SendACmd( "CLAL" );
-  CT->SendACmd( "ENTS" );
+  CT->SendACmd( StopModeCMD );
   //  CT->SendACmd( "GATEIN_EN" );   // default でこれになってるはず。念の為
 
   s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
@@ -42,7 +42,7 @@ void Body::AnsGetValue( SMsg msg )
 
 void Body::simpleSend( QString cmd, SMsg msg )
 {
-  //  qDebug() << "sending " << cmd << msg.Msg();
+  qDebug() << "sending " << cmd << msg.Msg();
   CT->SendACmd( cmd );
   s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   // 返答を待たず Ok:
@@ -62,7 +62,7 @@ void Body::AnsCounterReset( SMsg msg )
 void Body::AnsCountStart( SMsg msg )
 {
   CT->SendACmd( "STOP" );
-  //  CT->SendACmd( "ENTS" );
+  CT->SendACmd( StopModeCMD );
   CT->SendACmd( "CLAL" );
   CT->SendACmd( "GATEIN_DS" );
   CT->SendACmd( "STRT" );
@@ -82,7 +82,8 @@ void Body::AnsSetStopMode( SMsg msg )
   if ( cmd == "" ) {
     s->SendAns( msg, "@SetStopMode Er:" );
   } else {
-    simpleSend( cmd, msg );
+    StopModeCMD = cmd;
+    simpleSend( StopModeCMD, msg );
   }
 }
 
@@ -182,7 +183,8 @@ void Body::AnsQFinalize( SMsg msg )
     if ( ! finalized ) {        // 連続で何回も呼ばれても先頭の一回だけ
       CT->SendACmd( "STOP" );    // とにかく止めておく
 
-      CT->SendACmd( "ENTS" );
+      StopModeCMD = "ENTS";
+      CT->SendACmd( StopModeCMD );
       CT->SendACmd( "GATEIN_DS" );
       
       initialized = false;
