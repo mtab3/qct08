@@ -24,6 +24,7 @@ class Body : public QObject
   bool gotData;
   bool finalized;
   QStringList retDatas;
+  int dataNo;
   
   void simpleSend( QString cmd, SMsg msg );
   bool ReadConfig( void );

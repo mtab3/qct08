@@ -113,6 +113,7 @@ void Body::AnsQInitialize( SMsg msg )
   } else {
     //    int ch = ChName2Num[ msg.ToCh() ];
     if ( ! initialized ) {          // 連続で何回も呼ばれても先頭の一回だけ
+      CT->clearBuffer();
       CT->SendACmd( "STOP" );       // カウントしてても止める
       CT->SendACmd( "CLGSDN" );     // データ記録番地 0 にセット
       CT->SendACmd( "GSED9999" ); // データ記録最終番地(ここまで来ると収集は止まる)
@@ -122,6 +123,7 @@ void Body::AnsQInitialize( SMsg msg )
       CT->SendACmd( "GESTRT" );     // ゲートエッジデータ収集モード
                                     // 最初のゲート立ち上がりでカウントクリア
                                     // 以降のゲート立ち上がりでカウント記録
+      dataNo = 0;
       initialized = true;
       gotData = false;
       finalized = false;
@@ -141,8 +143,11 @@ void Body::AnsQGetData( SMsg msg )
     s->SendAns( msg, QString( "@%1 Er:" ).arg( msg.Msg() ) );
   } else {
     int ch = ChName2Num[ msg.ToCh() ];
-    CT->SendACmd( "STOP" );   // とにかく停止
-    int dataNo = CT->SendAndRead( "GSDN?", 4 ).toInt();
+    if ( initialized ) {
+      CT->SendACmd( "STOP" );   // とにかく停止
+      dataNo = CT->SendAndRead( "GSDN?", 4 ).toInt();
+    }
+    qDebug() << "asking" << ch << dataNo;
     if ( dataNo <= 0 ) {
       s->SendAns( msg, QString( "@qGetData 0" ) );
       return;
@@ -150,6 +155,7 @@ void Body::AnsQGetData( SMsg msg )
     
     QVector<double> ans;
     CT->QGetData( ch, dataNo, ans );
+    CT->clearBuffer();
 
     QString ret;
     bool ok;

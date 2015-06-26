@@ -38,6 +38,7 @@ void CT08::Connect( QString ip, QString port )
     SendACmd( "ENTS" );
     SendACmd( "CLGSDN" );     // データ記録番地 0 にセット
     SendACmd( "GATEIN_DS" );
+    busy = false;
   }
 }
 
@@ -62,13 +63,28 @@ QString CT08::SendAndRead( QString cmd, int size )
   rbuf.resize( ss->bytesAvailable() );
   ss->read( rbuf.data(), ss->bytesAvailable() );
 
+  qDebug() << "S&R" << cmd << rbuf;
   return QString( rbuf.data() );
+}
+
+// counter -- 8byte + ' ,' + timer -- 8byte + CRLF
+#define DATALEN    ( 8 + 2 + 8 + 2 )
+
+#include <stdio.h>
+
+void CT08::clearBuffer( void )
+{
+  ss->waitForReadyRead( 10 );
+  if ( ss->bytesAvailable() > 0 ) {
+    ss->read( ss->bytesAvailable() );
+  }
 }
 
 void CT08::QGetData( int ch, int num, QVector<double> &data )
 {
+  int cnt = 0;
   data.clear();
-  bool Reading = true;
+
   //  QString cmd = QString( "GSCRDX?%1%2%3%4%5" )
   QString cmd = QString( "GSCRDXH?%1%2%3%4%5" )
     .arg( ch,     2, 10, QChar( '0' ) )     // 指定チャンネル (ch) から
@@ -78,36 +94,28 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
     .arg( num,    4, 10, QChar( '0' ) );    // num 番目までのデータを読みだす
   SendACmd( cmd );
   ss->waitForReadyRead();
+  int len = DATALEN * num + 5;
+  qDebug() << "len " << len;
+  while( ss->bytesAvailable() < len ) { ss->waitForReadyRead(); }
+  QString Rbuf = ss->read( ss->bytesAvailable() );
+  qDebug() << "bytes" << ss->bytesAvailable() << Rbuf.size();
   double time0 = 0;
   double time = 0;
-  while ( Reading ) {
-    while ( ! ss->atEnd() ) {
-      QString rbuf = ss->readLine();
-      if ( rbuf.mid( 0, 3 ) == "EOF" ) {
-	Reading = false;
-	break;
-      }
-      //      QStringList vals = QString( rbuf ).simplified().remove( ',' ).split( ' ' );
-      QStringList vals = QString( rbuf ).simplified().remove( ' ' ).split( ',' );
-      qDebug() << "vals : " << QString( rbuf ) << ":::" << vals;
-      if ( vals.count() == 1 ) {      // Timer を読まないパタン。いまは使わない
-	data << vals[0].toInt( NULL, 16 );
-      } else if ( vals.count() == 2 ) {
-	time = (double)vals[1].toInt( NULL, 16 ) / 1e6;
-	data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
-	time0 = time;
-      }
-    }
-    if ( Reading ) {
-      ss->waitForReadyRead();
+  while( Rbuf.size() >= DATALEN ) {
+    QString rbuf = Rbuf.mid( 0, DATALEN );
+    Rbuf = Rbuf.mid( DATALEN );
+    QStringList vals = QString( rbuf ).simplified().remove( ' ' ).split( ',' );
+    if ( vals.count() == 2 ) {
+      time = (double)vals[1].toInt( NULL, 16 ) / 1e6;
+      data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
+      time0 = time;
+      if (( cnt == 0 )||( cnt == 1 )||( cnt > num -2 ))
+	qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ]
+		 << "vals : " << QString( rbuf ).simplified();
+      cnt++;
     }
   }
-#if 0
-  qDebug() << "reading " << ch;
-  for ( int i = 0 ; i < data.count(); i++ ) {
-    qDebug() << i << ": " << data[i].simplified();
-  }
-#endif
+  qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ];
 }
 
 void CT08::watch( void )

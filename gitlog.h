@@ -2,8 +2,12 @@
 #define GITLOG_H
 
 
-#define BRANCH_NAME ( "master" )
+#define BRANCH_NAME ( "new" )
 #define GITLOGS ""\
+                "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Mon Jun 22 20:41:49 2015 +0900\n"\
+                "    for the QGetData in ct08.cpp, GSCRDXH is used instead of GSCRDX, it look it makes the data transfer between ct08 and PC much faster.  But the data transfer is not perfect yet\n"\
+		"\n"\
                 "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Thu May 21 19:57:28 2015 +0900\n"\
                 "    Merge branch 'master' of ssh://titan/git/Qt0/qct08\n"\
@@ -39,10 +43,6 @@
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Thu Apr 9 20:24:44 2015 +0900\n"\
                 "    checked with XafsM2\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Wed Apr 8 16:07:46 2015 +0900\n"\
-                "    it looks it works well\n"\
 		"\n"\
                 ""
 #endif
