@@ -5,6 +5,10 @@
 #define BRANCH_NAME ( "new" )
 #define GITLOGS ""\
                 "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Fri Jun 26 18:03:42 2015 +0900\n"\
+                "    it may work but not tested with SR\n"\
+		"\n"\
+                "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Mon Jun 22 20:41:49 2015 +0900\n"\
                 "    for the QGetData in ct08.cpp, GSCRDXH is used instead of GSCRDX, it look it makes the data transfer between ct08 and PC much faster.  But the data transfer is not perfect yet\n"\
 		"\n"\
@@ -39,10 +43,6 @@
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Thu Apr 9 20:25:22 2015 +0900\n"\
                 "    clean up\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu Apr 9 20:24:44 2015 +0900\n"\
-                "    checked with XafsM2\n"\
 		"\n"\
                 ""
 #endif

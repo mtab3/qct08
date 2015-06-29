@@ -68,7 +68,7 @@ QString CT08::SendAndRead( QString cmd, int size )
 }
 
 // counter -- 8byte + ' ,' + timer -- 8byte + CRLF
-#define DATALEN    ( 8 + 2 + 8 + 2 )
+//#define DATALEN    ( 8 + 2 + 8 + 2 )
 
 #include <stdio.h>
 
@@ -86,17 +86,52 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
   data.clear();
 
   //  QString cmd = QString( "GSCRDX?%1%2%3%4%5" )
+  int Num = num;
+  if ( num > 9999 ) {
+    Num = ceil( ((double)Num) / 1000. );
+  }
+    
   QString cmd = QString( "GSCRDXH?%1%2%3%4%5" )
     .arg( ch,     2, 10, QChar( '0' ) )     // 指定チャンネル (ch) から
     .arg( ch,     2, 10, QChar( '0' ) )     // 指定チャンネル (ch) までの、要は ch だけの
     .arg( (int)1, 2, 10, QChar( '0' ) )     // タイマーも読み出して(0:w/o, 1:w timer)
     .arg( (int)0, 4, 10, QChar( '0' ) )     // 0 番目から
-    .arg( num,    4, 10, QChar( '0' ) );    // num 番目までのデータを読みだす
+    .arg( Num,    4, 10, QChar( '0' ) );    // num 番目までのデータを読みだす
+  if ( num > 9999 )
+    cmd += "K";
   SendACmd( cmd );
   ss->waitForReadyRead();
-  int len = DATALEN * num + 5;
-  qDebug() << "len " << len;
-  while( ss->bytesAvailable() < len ) { ss->waitForReadyRead(); }
+  // データ長は固定と思っていた時の名残
+  //  int len = DATALEN * num + 5;
+  //  qDebug() << "len " << len;
+
+  // ここでデータが完全に受信バッファに溜るのを待つ。
+  int oldLen = 0, newLen;
+  while( ( newLen = ss->bytesAvailable() ) != oldLen ) {
+    ss->waitForReadyRead(10);
+    oldLen = newLen;
+  }
+  // qDebug() << "old new len" << oldLen << newLen << ss->readBufferSize();
+
+#if 1
+  double time0 = 0;
+  double time = 0;
+  while( ! ss->atEnd() ) {
+    QString Rbuf = ss->readLine().simplified();
+    if ( Rbuf == "EOF" )
+      break;
+    QStringList vals = Rbuf.remove( ' ' ).split( ',' );
+    if ( vals.count() == 2 ) {
+      time = (double)vals[1].toInt( NULL, 16 ) / 1e6;
+      data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
+      time0 = time;
+      if (( cnt == 0 )||( cnt == 1 )||( cnt > num -2 ))
+	qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ]
+		 << "vals : " << Rbuf;
+      cnt++;
+    }
+  }
+#else
   QString Rbuf = ss->read( ss->bytesAvailable() );
   qDebug() << "bytes" << ss->bytesAvailable() << Rbuf.size();
   double time0 = 0;
@@ -115,6 +150,7 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
       cnt++;
     }
   }
+#endif
   qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ];
 }
 

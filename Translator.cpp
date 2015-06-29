@@ -116,7 +116,7 @@ void Body::AnsQInitialize( SMsg msg )
       CT->clearBuffer();
       CT->SendACmd( "STOP" );       // カウントしてても止める
       CT->SendACmd( "CLGSDN" );     // データ記録番地 0 にセット
-      CT->SendACmd( "GSED9999" ); // データ記録最終番地(ここまで来ると収集は止まる)
+      CT->SendACmd( "GSED55000" ); // データ記録最終番地(ここまで来ると収集は止まる)
       //      CT->sendACmd( "DSAS" );
       CT->SendACmd( "GATEIN_EN" );
       CT->SendACmd( "GT_ACQ_DIF" ); // カウントの差分を記録
