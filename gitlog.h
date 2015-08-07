@@ -5,6 +5,10 @@
 #define BRANCH_NAME ( "new" )
 #define GITLOGS ""\
                 "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Mon Jun 29 22:27:41 2015 +0900\n"\
+                "    It was tested with no SR.   The data transfer is faster than old one.   The number of data larger than 10000 is available\n"\
+		"\n"\
+                "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Fri Jun 26 18:03:42 2015 +0900\n"\
                 "    it may work but not tested with SR\n"\
 		"\n"\
@@ -39,10 +43,6 @@
                 "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Fri Apr 24 19:15:20 2015 +0900\n"\
                 "    debugging\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu Apr 9 20:25:22 2015 +0900\n"\
-                "    clean up\n"\
 		"\n"\
                 ""
 #endif

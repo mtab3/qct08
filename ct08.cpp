@@ -156,8 +156,9 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
 
 void CT08::watch( void )
 {
+  int busy0;
   QString RBuf = SendAndRead( "FLG?2", 2 );
-  if ( RBuf.mid( 8, 2 ).toInt( 0, 16 ) & 0x20 ) {
+  if ( busy0 = ( RBuf.mid( 8, 2 ).toInt( 0, 16 ) & 0x20 ) ) {
     if ( ! busy ) {
       busy = true;
       emit changedIsBusy( busy );
@@ -169,6 +170,7 @@ void CT08::watch( void )
       t->stop();
     }
   }
+  qDebug() << "busy busy0" << busy << busy0;
 }
 
 
