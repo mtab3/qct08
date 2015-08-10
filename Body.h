@@ -57,6 +57,8 @@ private slots:
   //  void ansGetData( CTMsg msg, SMsg smsg );
 
   void changedCTIsBusy( bool busy );
+
+  void Exit( void );
 signals:
   
 };
