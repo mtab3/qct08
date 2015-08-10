@@ -73,7 +73,7 @@ void Body::SetUpStarsConnection( void )
   connect( s, SIGNAL( Disconnected() ), this, SLOT( Exit() ) );
 }
 
-Body::Exit()
+void Body::Exit()
 {
   exit(0);
 }

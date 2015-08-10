@@ -7,3 +7,5 @@ qrc_*
 *.core
 qct08
 *.pro
+Makefile
+
