@@ -69,4 +69,11 @@ void Body::SetUpStarsConnection( void )
   s->SetNewSVAddress( Config["STARS_IP"] );
   s->SetNewSVPort( Config["STARS_PORT"] );
   s->MakeConnection();
+
+  connect( s, SIGNAL( Disconnected() ), this, SLOT( Exit() ) );
+}
+
+Body::Exit()
+{
+  exit(0);
 }

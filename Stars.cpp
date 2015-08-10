@@ -124,6 +124,7 @@ void Stars::MakeConnection( void )
 
       ConnectionStage = 0;
       connect( ss, SIGNAL( readyRead( void ) ), this, SLOT( ReceiveMessageFromStars( void ) ), Qt::UniqueConnection );
+      connect( ss, SIGNAL( disconnected() ), this, SIGNAL( Disconnected() ) );
       ss->connectToHost( StarsServer, StarsSPort );
     }
   }

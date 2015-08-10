@@ -57,6 +57,7 @@ public slots:
 signals:
   void ConnectionIsReady( Stars *s );
   void ReConnected( void );
+  void Disconnected( void );
 
   void AskIsBusy( SMsg msg );
   void AskReset( SMsg msg );
