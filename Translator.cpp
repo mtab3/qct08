@@ -30,13 +30,22 @@ void Body::AnsReset( SMsg msg )  // QXAFS
 
 void Body::AnsGetValue( SMsg msg )
 {
-  if ( ( msg.ToCh() == "" ) || ( ! ChName2Num.contains( msg.ToCh() ) ) ){
-    s->SendAns( msg, "@GetValue Er:" );
-  } else {
-    int ch = ChName2Num[ msg.ToCh() ];
+  QString Ch = msg.ToCh();
+  if ( NormalChNames.contains( Ch ) ) {
+    int ch = ChName2Num[ Ch ];
     QString cmd = QString( "CTR?%1" ).arg( ch, 2, 10, QChar( '0' ) );
     QString ans = CT->SendAndRead( cmd, 10 );
     s->SendAns( msg, QString( "@GetValue %1" ).arg( ans.toInt() ) );
+  } else if ( ExtraChNames.contains( Ch ) ) {
+    long ans = 0;
+    for ( int i = 0; i < ExtraChs[ Ch ].count(); i++ ) {
+      int ch = ChName2Num[ ExtraChs[ Ch ][ i ] ];
+      QString cmd = QString( "CTR?%1" ).arg( ch, 2, 10, QChar( '0' ) );
+      ans += CT->SendAndRead( cmd, 10 ).toInt();
+    }
+    s->SendAns( msg, QString( "@GetValue %1" ).arg( ans ) );
+  } else {
+    s->SendAns( msg, "@GetValue Er:" );
   }
 }
 
