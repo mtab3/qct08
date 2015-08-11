@@ -31,6 +31,7 @@ void Body::AnsReset( SMsg msg )  // QXAFS
 void Body::AnsGetValue( SMsg msg )
 {
   QString Ch = msg.ToCh();
+  qDebug() << "NormalChNames" << NormalChNames << Ch << NormalChNames.contains( Ch );
   if ( NormalChNames.contains( Ch ) ) {
     int ch = ChName2Num[ Ch ];
     QString cmd = QString( "CTR?%1" ).arg( ch, 2, 10, QChar( '0' ) );

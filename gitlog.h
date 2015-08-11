@@ -5,6 +5,10 @@
 #define BRANCH_NAME ( "ext" )
 #define GITLOGS ""\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Tue Aug 11 20:32:04 2015 +0900\n"\
+                "    working on extra channels, getValue is ready\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Tue Aug 11 20:11:20 2015 +0900\n"\
                 "    working on extra chnnels, ReadConf was edited\n"\
 		"\n"\
@@ -39,10 +43,6 @@
                 "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Thu May 21 19:57:28 2015 +0900\n"\
                 "    Merge branch 'master' of ssh://titan/git/Qt0/qct08\n"\
-		"\n"\
-                "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu May 21 19:56:57 2015 +0900\n"\
-                "    the problem for the continuous scan was solved\n"\
 		"\n"\
                 ""
 #endif
