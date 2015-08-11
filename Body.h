@@ -11,8 +11,10 @@ class Body : public QObject
   Q_OBJECT
 
   QMap<QString,QString> Config, ConfigL;
+  QStringList NormalChNames, ExtraChNames;
   QMap<int,QString> ChNum2Name;
   QMap<QString,int> ChName2Num;
+  QMap<QString,QStringList> ExtraChs;
 
   int Chs;
   CT08 *CT;

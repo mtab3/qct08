@@ -49,16 +49,35 @@ bool Body::ReadConfig( void )
 }
 
 #define CH_NAME   ( "CH_NAME" )
+#define ECH       ( "ECH" )
 
 void Body::SetUp( void )
 {
+  NormalChNames.clear();
+  ExtraChNames.clear();
+
   QList<QString> keys = Config.keys();
   
   for ( int i = 0; i < keys.count(); i++ ) {
     if ( keys[i].left( strlen( CH_NAME ) ) == CH_NAME ) {
       int ch = keys[i].mid( strlen( CH_NAME ) + 1 ).toInt();
+      NormalChNames << Config[ keys[i] ];
       ChNum2Name[ ch ] = Config[ keys[i] ];
       ChName2Num[ Config[ keys[i] ] ] = ch;
+      //      qDebug() << "NormalCh : "
+      //	       << ch << ChNum2Name[ ch ] << ChName2Num[ ChNum2Name[ ch ] ];
+    }
+    if ( keys[i].left( strlen( ECH ) ) == ECH ) {
+      //      int ch = keys[i].mid( strlen( ECH ) + 1 ).toInt();
+      ExtraChNames << Config[ keys[i] ];
+      QString args = ConfigL[ keys[i] ];
+      if ( args.indexOf( '#' ) >= 0 )
+	args = args.left( args.indexOf( '#' ) ).simplified();
+      ExtraChs[ Config[ keys[i] ] ] = args.split( QRegExp( "\\s+" ) );
+      ExtraChs[ Config[ keys[i] ] ].removeAt( 0 );
+      //      qDebug() << "ExtraCh " << Config[keys[i]] << ExtraChs[ Config[ keys[i] ] ];
     }
   }
+  //  qDebug() << "NormalChNames " << NormalChNames;
+  //  qDebug() << "ExtraChNames " << ExtraChNames;
 }
