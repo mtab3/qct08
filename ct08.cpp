@@ -89,6 +89,8 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
   int Num = num;
   if ( num > 9999 ) {
     Num = ceil( ((double)Num) / 1000. );
+  } else {
+    Num -= 1;     // データ個数は Num 個、なので読み出し番地指定は 0～Num-1
   }
     
   QString cmd = QString( "GSCRDXH?%1%2%3%4%5" )
@@ -123,8 +125,10 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
     QStringList vals = Rbuf.remove( ' ' ).split( ',' );
     if ( vals.count() == 2 ) {
       time = (double)vals[1].toInt( NULL, 16 ) / 1e6;
-      data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
-      time0 = time;
+      if ( time != time0 ) {
+	data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
+	time0 = time;
+      }
       if (( cnt == 0 )||( cnt == 1 )||( cnt > num -2 ))
 	qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ]
 		 << "vals : " << Rbuf;

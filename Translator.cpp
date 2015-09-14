@@ -115,6 +115,7 @@ void Body::AnsQInitialize( SMsg msg )
     if ( ! initialized ) {          // 連続で何回も呼ばれても先頭の一回だけ
       CT->clearBuffer();
       CT->SendACmd( "STOP" );       // カウントしてても止める
+      CT->SendACmd( "CLTM" );       // タイマー停止 !!
       CT->SendACmd( "CLGSDN" );     // データ記録番地 0 にセット
       CT->SendACmd( "GSED55000" ); // データ記録最終番地(ここまで来ると収集は止まる)
       //      CT->sendACmd( "DSAS" );
@@ -158,13 +159,12 @@ void Body::AnsQGetData( SMsg msg )
     CT->clearBuffer();
 
     QString ret;
-    bool ok;
     if ( ans.count() > 1 ) {
-      //      ret += " " + QString::number( ans[1].toInt( &ok, 16 ) );
+      //      ret += " " + QString::number( ans[1].toInt( NULL, 16 ) );
       ret += " " + QString::number( ans[1] );
     }
     for ( int i = 1; i < ans.count() - 1; i++ ) {
-      //      ret += " " + QString::number( ans[i].toInt( &ok, 16 ) );
+      //      ret += " " + QString::number( ans[i].toInt( NULL, 16 ) );
       ret += " " + QString::number( ans[i] );
     }
     s->SendAns( msg, QString( "@qGetData %1 %2" ).arg( ans.count() - 1 ).arg( ret ) );
