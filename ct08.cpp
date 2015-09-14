@@ -162,7 +162,7 @@ void CT08::watch( void )
 {
   int busy0;
   QString RBuf = SendAndRead( "FLG?2", 2 );
-  if ( busy0 = ( RBuf.mid( 8, 2 ).toInt( 0, 16 ) & 0x20 ) ) {
+  if ( ( busy0 = ( RBuf.mid( 8, 2 ).toInt( 0, 16 ) & 0x20 ) ) != 0 ) {
     if ( ! busy ) {
       busy = true;
       emit changedIsBusy( busy );

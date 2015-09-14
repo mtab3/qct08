@@ -6,8 +6,9 @@
 int main( int argc, char *argv[] )
 {
   QCoreApplication app( argc, argv );
-  Body *body = new Body;
-
+  //Body *body = new Body;
+  new Body;
+  
   return app.exec();
 }
 

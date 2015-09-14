@@ -163,11 +163,11 @@ void Body::AnsQGetData( SMsg msg )
       //      ret += " " + QString::number( ans[1].toInt( NULL, 16 ) );
       ret += " " + QString::number( ans[1] );
     }
-    for ( int i = 1; i < ans.count() - 1; i++ ) {
+    for ( int i = 1; i < ans.count(); i++ ) {
       //      ret += " " + QString::number( ans[i].toInt( NULL, 16 ) );
       ret += " " + QString::number( ans[i] );
     }
-    s->SendAns( msg, QString( "@qGetData %1 %2" ).arg( ans.count() - 1 ).arg( ret ) );
+    s->SendAns( msg, QString( "@qGetData %1 %2" ).arg( ans.count() ).arg( ret ) );
     
     initialized = false;
     gotData = true;

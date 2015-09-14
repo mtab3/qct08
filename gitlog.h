@@ -4,6 +4,10 @@
 
 #define BRANCH_NAME ( "master" )
 #define GITLOGS ""\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Mon Sep 14 17:24:12 2015 +0900\n"\
+                "    merge the change in 'check-dat-num-change'\n"\
+		"\n"\
                 "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Mon Aug 10 12:19:44 2015 +0900\n"\
                 "    Fix a small and add Makefile to .gitignore\n"\
@@ -39,10 +43,6 @@
                 "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Thu May 21 19:56:57 2015 +0900\n"\
                 "    the problem for the continuous scan was solved\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Thu May 21 12:39:54 2015 +0900\n"\
-                "    nothing\n"\
 		"\n"\
                 ""
 #endif
