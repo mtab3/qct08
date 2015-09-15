@@ -32,12 +32,12 @@ void Body::AnsGetValue( SMsg msg )
 {
   QString Ch = msg.ToCh();
   qDebug() << "NormalChNames" << NormalChNames << Ch << NormalChNames.contains( Ch );
-  if ( NormalChNames.contains( Ch ) ) {
+  if ( NormalChNames.contains( Ch ) ) {  // 単純チャンネルの場合の返答
     int ch = ChName2Num[ Ch ];
     QString cmd = QString( "CTR?%1" ).arg( ch, 2, 10, QChar( '0' ) );
     QString ans = CT->SendAndRead( cmd, 10 );
     s->SendAns( msg, QString( "@GetValue %1" ).arg( ans.toInt() ) );
-  } else if ( ExtraChNames.contains( Ch ) ) {
+  } else if ( ExtraChNames.contains( Ch ) ) {  // 複合チャンネルの場合の返答
     long ans = 0;
     for ( int i = 0; i < ExtraChs[ Ch ].count(); i++ ) {
       int ch = ChName2Num[ ExtraChs[ Ch ][ i ] ];
@@ -153,37 +153,62 @@ void Body::AnsQGetData( SMsg msg )
   if ( ( msg.ToCh() == "" ) || ( ! ChName2Num.contains( msg.ToCh() ) ) ){
     s->SendAns( msg, QString( "@%1 Er:" ).arg( msg.Msg() ) );
   } else {
-    int ch = ChName2Num[ msg.ToCh() ];
+    QString Ch = msg.ToCh();
     if ( initialized ) {
       CT->SendACmd( "STOP" );   // とにかく停止
       dataNo = CT->SendAndRead( "GSDN?", 4 ).toInt();
     }
-    qDebug() << "asking" << ch << dataNo;
     if ( dataNo <= 0 ) {
       s->SendAns( msg, QString( "@qGetData 0" ) );
       return;
     }
-    
-    QVector<double> ans;
-    CT->QGetData( ch, dataNo, ans );
-    CT->clearBuffer();
 
-    QString ret;
-    if ( ans.count() > 1 ) {
-      //      ret += " " + QString::number( ans[1].toInt( NULL, 16 ) );
-      ret += " " + QString::number( ans[1] );
+    if ( NormalChNames.contains( Ch ) ) {  // 単純チャンネルの返答
+      int ch = ChName2Num[ msg.ToCh() ];
+      
+      QVector<double> ans;
+      CT->QGetData( ch, dataNo, ans );
+      CT->clearBuffer();
+      
+      QString ret;
+      if ( ans.count() > 1 ) {
+	ret += " " + QString::number( ans[1] );
+      }
+      for ( int i = 1; i < ans.count(); i++ ) {
+	ret += " " + QString::number( ans[i] );
+      }
+      s->SendAns( msg, QString( "@qGetData %1 %2" ).arg( ans.count() ).arg( ret ) );
+    } else if ( ExtraChNames.contains( Ch ) ) {  // 複合チャンネルの場合の返答
+      QVector<double> ansSum;
+      ansSum.resize( dataNo );
+      for ( int i = 0; i < dataNo; i++ )
+	ansSum[i] = 0;
+      
+      for ( int i = 0; i < ExtraChs[ Ch ].count(); i++ ) {
+	int ch = ChName2Num[ ExtraChs[ Ch ][ i ] ];
+	QVector<double> ans;
+	CT->QGetData( ch, dataNo, ans );
+	CT->clearBuffer();
+	for ( int j = 0; j < dataNo; j++ ) {
+	  ansSum[j] += ans[j];
+	}
+      }
+      QString ret;
+      if ( ansSum.count() > 1 ) {
+	ret += " " + QString::number( ansSum[1] );
+      }
+      for ( int i = 1; i < ansSum.count(); i++ ) {
+	ret += " " + QString::number( ansSum[i] );
+      }
+      s->SendAns( msg, QString( "@qGetData %1 %2" ).arg( ansSum.count() ).arg( ret ) );
+
+    } else {
+      s->SendAns( msg, "@GetValue Er:" );
     }
-    for ( int i = 1; i < ans.count(); i++ ) {
-      //      ret += " " + QString::number( ans[i].toInt( NULL, 16 ) );
-      ret += " " + QString::number( ans[i] );
-    }
-    s->SendAns( msg, QString( "@qGetData %1 %2" ).arg( ans.count() ).arg( ret ) );
     
     initialized = false;
     gotData = true;
     finalized = false;
-    // }
-    //    s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   }
 }
  
