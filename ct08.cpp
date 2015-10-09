@@ -130,14 +130,14 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
 	time0 = time;
       }
       if (( cnt == 0 )||( cnt == 1 )||( cnt > num -2 ))
-	qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ]
-		 << "vals : " << Rbuf;
+	//	qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ]
+	//	 << "vals : " << Rbuf;
       cnt++;
     }
   }
 #else
   QString Rbuf = ss->read( ss->bytesAvailable() );
-  qDebug() << "bytes" << ss->bytesAvailable() << Rbuf.size();
+  //  qDebug() << "bytes" << ss->bytesAvailable() << Rbuf.size();
   double time0 = 0;
   double time = 0;
   while( Rbuf.size() >= DATALEN ) {
@@ -149,13 +149,13 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
       data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
       time0 = time;
       if (( cnt == 0 )||( cnt == 1 )||( cnt > num -2 ))
-	qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ]
-		 << "vals : " << QString( rbuf ).simplified();
+	//	qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ]
+	//	 << "vals : " << QString( rbuf ).simplified();
       cnt++;
     }
   }
 #endif
-  qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ];
+  //  qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ];
 }
 
 void CT08::watch( void )
@@ -174,7 +174,7 @@ void CT08::watch( void )
       t->stop();
     }
   }
-  qDebug() << "busy busy0" << busy << busy0;
+  //  qDebug() << "busy busy0" << busy << busy0;
 }
 
 

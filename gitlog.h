@@ -5,6 +5,14 @@
 #define BRANCH_NAME ( "ext" )
 #define GITLOGS ""\
                 "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Wed Sep 16 16:20:09 2015 +0900\n"\
+                "    modify qct08.cfg\n"\
+		"\n"\
+                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Tue Sep 15 15:59:26 2015 +0900\n"\
+                "    仮想の複合チャンネルサポート\n"\"    これまでも(光がある状態ではチェックしていないが) GetValue では\n"\"    複合チャンネルからのでデータ読み出しができていたはず。\n"\"    今回は、qGetData でも複合チャンネルをサポートしたつもり。\n"\"    いずれにしても、光がある状態では未確認。\n"\
+		"\n"\
+                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Tue Sep 15 13:49:49 2015 +0900\n"\
                 "    merged with master\n"\
 		"\n"\
@@ -35,14 +43,6 @@
                 "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Mon Aug 10 12:16:20 2015 +0900\n"\
                 "    Merge branch 'master' of titan.nusr.nagoya-u.ac.jp:prog/Qt0/qct08\n"\
-		"\n"\
-                "Author      : H. Asakura <h.asakura@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Mon Aug 10 12:07:26 2015 +0900\n"\
-                "    Add Graceful exit\n"\
-		"\n"\
-                "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Fri Aug 7 14:16:04 2015 +0900\n"\
-                "    now\n"\
 		"\n"\
                 ""
 #endif
