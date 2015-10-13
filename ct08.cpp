@@ -126,7 +126,9 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
     if ( vals.count() == 2 ) {
       time = (double)vals[1].toInt( NULL, 16 ) / 1e6;
       if ( time != time0 ) {
-	data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
+	if ( cnt < num ) {
+	  data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
+	}
 	time0 = time;
       }
       if (( cnt == 0 )||( cnt == 1 )||( cnt > num -2 ))
@@ -146,7 +148,8 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
     QStringList vals = QString( rbuf ).simplified().remove( ' ' ).split( ',' );
     if ( vals.count() == 2 ) {
       time = (double)vals[1].toInt( NULL, 16 ) / 1e6;
-      data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
+      if ( cnt < num )
+	data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
       time0 = time;
       if (( cnt == 0 )||( cnt == 1 )||( cnt > num -2 ))
 	//	qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ]

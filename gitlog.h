@@ -4,6 +4,10 @@
 
 #define BRANCH_NAME ( "ext" )
 #define GITLOGS ""\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Fri Oct 9 21:26:36 2015 +0900\n"\
+                "    The ext-ch is checked with SR.  It works well to sum up 3-SDD chs\n"\
+		"\n"\
                 "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Wed Sep 16 16:20:09 2015 +0900\n"\
                 "    modify qct08.cfg\n"\
@@ -39,10 +43,6 @@
                 "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Mon Aug 10 12:19:44 2015 +0900\n"\
                 "    Fix a small and add Makefile to .gitignore\n"\
-		"\n"\
-                "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Mon Aug 10 12:16:20 2015 +0900\n"\
-                "    Merge branch 'master' of titan.nusr.nagoya-u.ac.jp:prog/Qt0/qct08\n"\
 		"\n"\
                 ""
 #endif

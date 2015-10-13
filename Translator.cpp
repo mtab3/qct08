@@ -145,7 +145,6 @@ void Body::AnsQInitialize( SMsg msg )
 }
 
 // Gate の Hの時間とLの時間の合計は最低 1ms 必要 !!
-
 // AnsGetData が返すのは Count ではなく cps (count per sec)
 // ct08.cpp の側で、時間で割り算した値を返すようになっている
 void Body::AnsQGetData( SMsg msg )
