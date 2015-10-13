@@ -110,7 +110,7 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
   // ここでデータが完全に受信バッファに溜るのを待つ。
   int oldLen = 0, newLen;
   while( ( newLen = ss->bytesAvailable() ) != oldLen ) {
-    ss->waitForReadyRead(10);
+    ss->waitForReadyRead(100);
     oldLen = newLen;
   }
   // qDebug() << "old new len" << oldLen << newLen << ss->readBufferSize();
@@ -118,25 +118,29 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
 #if 1
   double time0 = 0;
   double time = 0;
+  qDebug() << "in QGetData : num = " << num;
   while( ! ss->atEnd() ) {
     QString Rbuf = ss->readLine().simplified();
-    if ( Rbuf == "EOF" )
+    if ( Rbuf == "EOF" ) {
+      qDebug() << "normally break by EOF";
       break;
+    }
     QStringList vals = Rbuf.remove( ' ' ).split( ',' );
     if ( vals.count() == 2 ) {
       time = (double)vals[1].toInt( NULL, 16 ) / 1e6;
       if ( time != time0 ) {
-	if ( cnt < num ) {
+	if ( cnt <= num ) {   // The number of data is 'num'
 	  data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
 	}
 	time0 = time;
       }
-      if (( cnt == 0 )||( cnt == 1 )||( cnt > num -2 ))
+      // if (( cnt == 0 )||( cnt == 1 )||( cnt > num -2 ))
 	//	qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ]
 	//	 << "vals : " << Rbuf;
       cnt++;
     }
   }
+  qDebug() << "in QGetData : data.count() = " << data.count();
 #else
   QString Rbuf = ss->read( ss->bytesAvailable() );
   //  qDebug() << "bytes" << ss->bytesAvailable() << Rbuf.size();
@@ -151,7 +155,7 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
       if ( cnt < num )
 	data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
       time0 = time;
-      if (( cnt == 0 )||( cnt == 1 )||( cnt > num -2 ))
+      // if (( cnt == 0 )||( cnt == 1 )||( cnt > num -2 ))
 	//	qDebug() << "time" << ch << cnt << num << time << data[ data.count() - 1 ]
 	//	 << "vals : " << QString( rbuf ).simplified();
       cnt++;
