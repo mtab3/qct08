@@ -5,6 +5,10 @@
 #define BRANCH_NAME ( "ext" )
 #define GITLOGS ""\
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Tue Oct 13 18:07:04 2015 +0900\n"\
+                "    modified ct08.cpp to return correct number of datas by QGetData\n"\
+		"\n"\
+                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Fri Oct 9 21:26:36 2015 +0900\n"\
                 "    The ext-ch is checked with SR.  It works well to sum up 3-SDD chs\n"\
 		"\n"\
@@ -39,10 +43,6 @@
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Tue Aug 11 20:11:20 2015 +0900\n"\
                 "    working on extra chnnels, ReadConf was edited\n"\
-		"\n"\
-                "Author      : Masao Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Mon Aug 10 12:19:44 2015 +0900\n"\
-                "    Fix a small and add Makefile to .gitignore\n"\
 		"\n"\
                 ""
 #endif
