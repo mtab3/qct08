@@ -104,21 +104,20 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
   SendACmd( cmd );
 
   bool Finished = false;
+  QTime time;
+  time.start();  // measure total time to elapsed in the following loop 
   while(( cnt < num )&&( !Finished )) {
+    qDebug() << "waitForReadyRead" << ss->bytesAvailable() << cnt << num;
     // ここでデータがなるべく多く受信バッファに溜るのを待つ。
-    //    int oldLen = 0, newLen;
-#if 0
-    ss->waitForReadyRead();
+    int oldLen = 0, newLen;
+    if ( ! ss->waitForReadyRead( 50 ) ) {
+      if ( time.elapsed() > 1000 )
+	Finished = true;
+    }
     while( ( newLen = ss->bytesAvailable() ) != oldLen ) {
-      ss->waitForReadyRead(10);
       oldLen = newLen;
+      ss->waitForReadyRead( 50 );
     }
-#else
-    if ( ! ss->waitForReadyRead( 3000 ) ) {  // 3秒(3,000msec)待ってデータが来なければ諦める
-      break;
-      Finished = true;
-    }
-#endif
     
     double time0 = 0;
     double time = 0;
@@ -133,17 +132,18 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
       QStringList vals = Rbuf.remove( ' ' ).split( ',' );
       if ( vals.count() == 2 ) {
 	time = (double)vals[1].toInt( NULL, 16 ) / 1e6;
-	if ( time != time0 ) {
-	  if ( cnt <= num ) {   // The number of data is 'num'
+	if ( cnt < num ) {   // The number of data is 'num'
+	  if ( time != time0 ) {
 	    data << (double)vals[0].toInt( NULL, 16 ) / ( time - time0 );
+	    time0 = time;
 	  }
-	  time0 = time;
 	}
 	cnt++;
       }
     }
     qDebug() << "in QGetData : data.count() = " << data.count();
   }
+  qDebug() << "-----------------------";
 }
 
 void CT08::watch( void )
