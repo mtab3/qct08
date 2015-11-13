@@ -5,6 +5,10 @@
 #define BRANCH_NAME ( "master" )
 #define GITLOGS ""\
                 "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
+                "Date        : Fri Nov 13 11:25:48 2015 +0900\n"\
+                "    merged 'stop multi changedIsBusy'\n"\
+		"\n"\
+                "Author      : Masao TABUCHI <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Fri Nov 13 11:18:19 2015 +0900\n"\
                 "    Merge remote-tracking branch 'origin/ext-chs' into ext-chs\n"\
 		"\n"\
@@ -69,10 +73,6 @@
                 "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
                 "Date        : Tue Oct 13 18:07:04 2015 +0900\n"\
                 "    modified ct08.cpp to return correct number of datas by QGetData\n"\
-		"\n"\
-                "Author      : M. Tabuchi <m.tabuchi@nusr.nagoya-u.ac.jp>\n"\
-                "Date        : Fri Oct 9 21:26:36 2015 +0900\n"\
-                "    The ext-ch is checked with SR.  It works well to sum up 3-SDD chs\n"\
 		"\n"\
                 ""
 #endif

@@ -104,14 +104,14 @@ void CT08::QGetData( int ch, int num, QVector<double> &data )
   SendACmd( cmd );
 
   bool Finished = false;
-  QTime time;
-  time.start();  // measure total time to elapsed in the following loop 
+  QTime eTime;
+  eTime.start();  // measure total time to elapsed in the following loop 
   while(( cnt < num )&&( !Finished )) {
     qDebug() << "waitForReadyRead" << ss->bytesAvailable() << cnt << num;
     // ここでデータがなるべく多く受信バッファに溜るのを待つ。
     int oldLen = 0, newLen;
     if ( ! ss->waitForReadyRead( 50 ) ) {
-      if ( time.elapsed() > 1000 )
+      if ( eTime.elapsed() > 1000 )
 	Finished = true;
     }
     while( ( newLen = ss->bytesAvailable() ) != oldLen ) {
