@@ -8,7 +8,7 @@ void Body::AnsIsBusy( SMsg msg )
 
 void Body::changedCTIsBusy( bool busy )
 {
-  newBusyStat = ( ( busy ) ? 1 : 0 );
+  int newBusyStat = ( ( busy ) ? 1 : 0 );
   if ( newBusyStat != busyStat ) {
     busyStat = newBusyStat;
     s->SendEvent( Config[ "NAME_ON_STARS" ],
