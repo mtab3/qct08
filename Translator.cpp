@@ -35,7 +35,7 @@ void Body::AnsReset( SMsg msg )  // QXAFS
 void Body::AnsGetValue( SMsg msg )
 {
   QString Ch = msg.ToCh();
-  qDebug() << "NormalChNames" << NormalChNames << Ch << NormalChNames.contains( Ch );
+  //  qDebug() << "NormalChNames" << NormalChNames << Ch << NormalChNames.contains( Ch );
   if ( NormalChNames.contains( Ch ) ) {  // 単純チャンネルの場合の返答
     int ch = ChName2Num[ Ch ];
     QString cmd = QString( "CTR?%1" ).arg( ch, 2, 10, QChar( '0' ) );
@@ -56,7 +56,7 @@ void Body::AnsGetValue( SMsg msg )
 
 void Body::simpleSend( QString cmd, SMsg msg )
 {
-  qDebug() << "sending " << cmd << msg.Msg();
+  //  qDebug() << "sending " << cmd << msg.Msg();
   CT->SendACmd( cmd );
   s->SendAns( msg, QString( "@%1 Ok:" ).arg( msg.Msg() ) );
   // 返答を待たず Ok:
@@ -149,12 +149,12 @@ void Body::AnsQInitialize( SMsg msg )
 }
 
 // Gate の Hの時間とLの時間の合計は最低 1ms 必要 !!
-
 // AnsGetData が返すのは Count ではなく cps (count per sec)
 // ct08.cpp の側で、時間で割り算した値を返すようになっている
 void Body::AnsQGetData( SMsg msg )
 {
-  if ( ( msg.ToCh() == "" ) || ( ! ChName2Num.contains( msg.ToCh() ) ) ){
+  if ( ( msg.ToCh() == "" ) || ( ( ! ChName2Num.contains( msg.ToCh() ) )
+				 && ( ! ExtraChNames.contains( msg.ToCh() )) ) ){
     s->SendAns( msg, QString( "@%1 Er:" ).arg( msg.Msg() ) );
   } else {
     QString Ch = msg.ToCh();
@@ -168,6 +168,7 @@ void Body::AnsQGetData( SMsg msg )
     }
 
     if ( NormalChNames.contains( Ch ) ) {  // 単純チャンネルの返答
+      //      qDebug() << "Normal!";
       int ch = ChName2Num[ msg.ToCh() ];
       
       QVector<double> ans;
@@ -183,6 +184,7 @@ void Body::AnsQGetData( SMsg msg )
       }
       s->SendAns( msg, QString( "@qGetData %1 %2" ).arg( ans.count() ).arg( ret ) );
     } else if ( ExtraChNames.contains( Ch ) ) {  // 複合チャンネルの場合の返答
+      //      qDebug() << "Extra!";
       QVector<double> ansSum;
       ansSum.resize( dataNo );
       for ( int i = 0; i < dataNo; i++ )
@@ -196,8 +198,10 @@ void Body::AnsQGetData( SMsg msg )
 	for ( int j = 0; j < dataNo; j++ ) {
 	  ansSum[j] += ans[j];
 	}
+	//	qDebug() << "ansSum " << i << ansSum[0] << ansSum[2000] << ansSum[3000];
       }
       QString ret;
+      ret.clear();
       if ( ansSum.count() > 1 ) {
 	ret += " " + QString::number( ansSum[1] );
       }
