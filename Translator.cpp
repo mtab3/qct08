@@ -8,8 +8,12 @@ void Body::AnsIsBusy( SMsg msg )
 
 void Body::changedCTIsBusy( bool busy )
 {
-  s->SendEvent( Config[ "NAME_ON_STARS" ],
-		QString( "_ChangedIsBusy %1" ).arg( busy ? 1 : 0 ) );
+  newBusyStat = ( ( busy ) ? 1 : 0 );
+  if ( newBusyStat != busyStat ) {
+    busyStat = newBusyStat;
+    s->SendEvent( Config[ "NAME_ON_STARS" ],
+		  QString( "_ChangedIsBusy %1" ).arg( busyStat ) );
+  }
 }
 
 void Body::AnsReset( SMsg msg )  // QXAFS 

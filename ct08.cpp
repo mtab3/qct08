@@ -163,12 +163,14 @@ void CT08::watch( void )
   int busy0;
   QString RBuf = SendAndRead( "FLG?2", 2 );
   if ( ( busy0 = ( RBuf.mid( 8, 2 ).toInt( 0, 16 ) & 0x20 ) ) != 0 ) {
-    if ( ! busy ) {
+    // busy 状態になっていて
+    if ( ! busy ) {  // まだ busy フラグが立っていなければ
       busy = true;
       emit changedIsBusy( busy );
     }
   } else {
-    if ( busy ) {
+    // 非 busy 状態になっていて
+    if ( busy ) {  // busy フラグが立っていれば
       busy = false;
       emit changedIsBusy( busy );
       t->stop();

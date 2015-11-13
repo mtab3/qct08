@@ -19,6 +19,7 @@ class Body : public QObject
   int Chs;
   CT08 *CT;
   Stars *s;
+  int busyStat;
 
   QString StopModeCMD;
 

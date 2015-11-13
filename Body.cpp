@@ -13,6 +13,7 @@ Body::Body()
   initialized = false;
   gotData = false;
   finalized = false;
+  busyStat = -1;
 
   StopModeCMD = "ENTS";
 
